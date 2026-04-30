@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Studies | Yaser Al-Shkre</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=DM+Sans:wght@300;400;500&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="site-data.js"></script>
+<script src="theme.js"></script>
+<style>
+:root{--black:#0a0a0a;--white:#f5f3ef;--teal:#2dd4bf;--teal2:rgba(45,212,191,.12);--teal3:#0d9488;--g1:#161616;--g2:#222;--g3:#333;--g4:#666;--g5:#aaa;--serif:'Cormorant Garamond',serif;--sans:'DM Sans',sans-serif;--ar:'Tajawal',sans-serif}
+html[lang="ar"]{direction:rtl}html[lang="ar"] body{font-family:var(--ar)}
+html[lang="ar"] .en{display:none!important}html[lang="en"] .ar{display:none!important}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-weight:300;line-height:1.7;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(10,10,10,.9);backdrop-filter:blur(16px);border-bottom:.5px solid rgba(255,255,255,.06)}
+.nav-logo img{height:32px}.nav-links{display:flex;align-items:center;gap:2.5rem;list-style:none}
+.nav-links a{color:var(--g5);text-decoration:none;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;transition:color .2s}.nav-links a:hover,.nav-links a.act{color:var(--teal)}
+.nav-right{display:flex;align-items:center;gap:.8rem}
+.lang-btn{background:transparent;border:.5px solid var(--g3);color:var(--g4);padding:.3rem .85rem;font-size:.72rem;letter-spacing:.1em;cursor:pointer;transition:all .2s;font-family:var(--sans)}.lang-btn:hover{border-color:var(--teal);color:var(--teal)}
+.nav-cta{background:transparent;border:.5px solid var(--teal);color:var(--teal);padding:.45rem 1.3rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .22s;font-family:var(--sans);text-decoration:none;display:inline-block}.nav-cta:hover{background:var(--teal);color:var(--black)}
+.page-hero{padding:10rem 4rem 4rem;background:var(--g1);border-bottom:.5px solid var(--g2);position:relative;overflow:hidden}
+.page-hero::after{content:'';position:absolute;top:0;right:0;width:35%;height:100%;background:radial-gradient(ellipse at right,rgba(45,212,191,.05) 0%,transparent 70%);pointer-events:none}
+.ph-label{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--teal);margin-bottom:.8rem;display:flex;align-items:center;gap:.7rem}
+.ph-label::before{content:'';width:1.4rem;height:.5px;background:var(--teal)}
+html[lang="ar"] .ph-label{flex-direction:row-reverse}html[lang="ar"] .ph-label::before{display:none}
+html[lang="ar"] .ph-label::after{content:'';width:1.4rem;height:.5px;background:var(--teal)}
+.page-hero h1{font-family:var(--serif);font-size:clamp(2.4rem,4vw,3.8rem);font-weight:300;color:var(--white);line-height:1.1;margin-bottom:.7rem}
+html[lang="ar"] .page-hero h1{font-family:var(--ar);font-size:clamp(2rem,3.5vw,3rem)}
+.page-hero p{font-size:.88rem;color:var(--g4);max-width:500px}
+.filter-bar{padding:1rem 4rem;background:var(--black);border-bottom:.5px solid var(--g2);display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.filter-lbl{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--g3);margin-right:.4rem}
+html[lang="ar"] .filter-lbl{margin-right:0;margin-left:.4rem}
+.fb{background:transparent;border:.5px solid var(--g2);color:var(--g4);padding:.32rem .85rem;font-size:.68rem;letter-spacing:.07em;cursor:pointer;font-family:var(--sans);transition:all .2s}
+html[lang="ar"] .fb{font-family:var(--ar)}.fb:hover{border-color:var(--g3);color:var(--white)}.fb.act{border-color:var(--teal);color:var(--teal);background:var(--teal2)}
+.cases-wrap{padding:3rem 4rem 5rem}
+.cases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.5px;background:var(--g2);border:.5px solid var(--g2)}
+.case-card{background:var(--black);cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:background .25s}.case-card:hover{background:#0f0f0f}
+.cc-img{aspect-ratio:16/9;overflow:hidden;position:relative;background:var(--g1)}
+.cc-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}.case-card:hover .cc-img img{transform:scale(1.04)}
+.cc-img-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:2.5rem;font-weight:300;color:var(--g2)}
+.cc-body{padding:1.7rem;flex:1;display:flex;flex-direction:column;gap:.8rem}
+.cc-meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.cc-ind{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.cc-date{font-size:.58rem;color:var(--g3)}
+.feat-badge{background:var(--teal2);border:.5px solid var(--teal);color:var(--teal);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;padding:.15rem .5rem}
+.cc-title{font-family:var(--serif);font-size:1.3rem;font-weight:300;color:var(--white);line-height:1.25;flex:0}
+html[lang="ar"] .cc-title{font-family:var(--ar);font-size:1.05rem;line-height:1.4}
+.cc-sum{font-size:.78rem;color:var(--g4);line-height:1.75}
+.cc-mets{display:flex;gap:1.3rem;padding-top:.9rem;border-top:.5px solid var(--g2)}
+.cm-v{font-family:var(--serif);font-size:1.4rem;color:var(--teal);line-height:1}.cm-l{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--g4);margin-top:.1rem}
+.cc-tags{display:flex;gap:.35rem;flex-wrap:wrap}
+.ctag{font-size:.58rem;letter-spacing:.07em;color:var(--g3);border:.5px solid var(--g2);padding:.15rem .5rem}
+.cc-read{display:flex;align-items:center;gap:.45rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);padding-top:.75rem;border-top:.5px solid var(--g2);margin-top:auto;transition:gap .2s}.case-card:hover .cc-read{gap:.75rem}
+.empty{text-align:center;padding:5rem;color:var(--g4);font-size:.85rem;grid-column:1/-1}
+/* Modal */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .28s}.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:var(--g1);border:.5px solid var(--g2);max-width:840px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(20px);transition:transform .28s;position:relative}.modal-ov.open .modal{transform:translateY(0)}
+.modal-hdr{position:sticky;top:0;background:var(--g1);border-bottom:.5px solid var(--g2);padding:.9rem 1.3rem;display:flex;justify-content:flex-end;z-index:5}
+.modal-close{background:transparent;border:.5px solid var(--g2);color:var(--g4);width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all .15s}.modal-close:hover{border-color:var(--teal);color:var(--teal)}
+.modal-img{aspect-ratio:16/7;overflow:hidden;position:relative;background:var(--g2)}
+.modal-img img{width:100%;height:100%;object-fit:cover;display:block}
+.modal-body{padding:2.2rem}
+.modal-meta{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-bottom:1.1rem}
+.modal-ind{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--teal)}
+.modal-scope{font-size:.62rem;color:var(--g4)}
+.modal-title{font-family:var(--serif);font-size:1.9rem;font-weight:300;color:var(--white);line-height:1.2;margin-bottom:1.7rem}
+html[lang="ar"] .modal-title{font-family:var(--ar);font-size:1.5rem}
+.modal-mets{display:flex;gap:1.8rem;padding:1.2rem;background:rgba(45,212,191,.04);border:.5px solid rgba(45,212,191,.2);margin-bottom:1.8rem;flex-wrap:wrap}
+.mm-v{font-family:var(--serif);font-size:1.9rem;color:var(--teal);line-height:1}.mm-l{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--g4);margin-top:.15rem}
+.modal-sec{margin-bottom:1.7rem}
+.modal-sec-lbl{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem;display:flex;align-items:center;gap:.7rem}.modal-sec-lbl::after{content:'';flex:1;height:.5px;background:var(--g2)}
+.modal-sec-txt{font-size:.85rem;color:var(--g4);line-height:1.9}
+footer{background:var(--black);padding:2.5rem 4rem;display:flex;align-items:center;justify-content:space-between;border-top:.5px solid var(--g2)}
+.footer-copy{font-size:.68rem;color:var(--g3)}.footer-logo img{height:26px}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}.page-hero,.cases-wrap,.filter-bar{padding-left:1.5rem;padding-right:1.5rem}.cases-grid{grid-template-columns:1fr}footer{flex-direction:column;gap:1rem;padding:2rem 1.5rem}.modal-ov{padding:0;align-items:flex-end}.modal{max-height:92vh}.modal-body{padding:1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></a>
+  <ul class="nav-links">
+    <li><a href="index.html#value" class="en">Approach</a><a href="index.html#value" class="ar">المنهجية</a></li>
+    <li><a href="index.html#services" class="en">Services</a><a href="index.html#services" class="ar">الخدمات</a></li>
+    <li><a href="cases.html" class="en act">Case Studies</a><a href="cases.html" class="ar act">دراسات الحالة</a></li>
+    <li><a href="index.html#about" class="en">About</a><a href="index.html#about" class="ar">عن المستشار</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="lang-btn" onclick="toggleLang()">عربي</button>
+    <a href="index.html#contact" class="nav-cta en">Book a Call</a>
+    <a href="index.html#contact" class="nav-cta ar">احجز استشارة</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="ph-label"><span class="en">Proven Results</span><span class="ar">نتائج موثّقة</span></div>
+  <h1 class="en">Case Studies</h1><h1 class="ar">دراسات الحالة</h1>
+  <p class="en">Real transformations. Measurable outcomes. A growing archive of institutional change.</p>
+  <p class="ar">تحولات حقيقية. نتائج قابلة للقياس. أرشيف متنامٍ من التغيير المؤسسي.</p>
+</div>
+
+<div class="filter-bar">
+  <span class="filter-lbl en">Filter:</span><span class="filter-lbl ar">تصفية:</span>
+  <button class="fb act" onclick="filter('all',this)"><span class="en">All</span><span class="ar">الكل</span></button>
+  <div id="filter-btns"></div>
+</div>
+
+<div class="cases-wrap">
+  <div class="cases-grid" id="cases-grid"></div>
+</div>
+
+<div class="modal-ov" id="modal-ov" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr"><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-img" id="modal-img-wrap"><img id="modal-img" src="" alt=""></div>
+    <div class="modal-body">
+      <div class="modal-meta"><span class="modal-ind" id="m-ind"></span><span style="color:var(--g3)">·</span><span class="modal-scope" id="m-scope"></span></div>
+      <h2 class="modal-title" id="m-title"></h2>
+      <div class="modal-mets" id="m-mets"></div>
+      <div class="modal-sec"><div class="modal-sec-lbl en">The Challenge</div><div class="modal-sec-lbl ar">التحدي</div><p class="modal-sec-txt" id="m-challenge"></p></div>
+      <div class="modal-sec"><div class="modal-sec-lbl en">The Intervention</div><div class="modal-sec-lbl ar">التدخل الاستراتيجي</div><p class="modal-sec-txt" id="m-intervention"></p></div>
+      <div class="modal-sec"><div class="modal-sec-lbl en">The Results</div><div class="modal-sec-lbl ar">النتائج</div><p class="modal-sec-txt" id="m-results"></p></div>
+      <a href="index.html#contact" class="nav-cta en" style="display:inline-block;margin-top:1rem">Discuss a Similar Challenge →</a>
+      <a href="index.html#contact" class="nav-cta ar" style="display:inline-block;margin-top:1rem">← ناقش تحدياً مشابهاً</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy en">© 2025 Yaser Ahmed Al-Shkre. All rights reserved.</div>
+  <div class="footer-copy ar">© 2025 ياسر أحمد الشكري. جميع الحقوق محفوظة.</div>
+  <div class="footer-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></div>
+</footer>
+
+<script>
+const L = () => document.documentElement.lang;
+const T = o => o ? (o[L()] || o.en || '') : '';
+let allCases = [], activeFilter = 'all';
+
+function toggleLang() {
+  const h = document.documentElement, btn = document.getElementById('lang-btn');
+  if (h.lang==='en'){h.lang='ar';h.dir='rtl';btn.textContent='English';}
+  else{h.lang='en';h.dir='ltr';btn.textContent='عربي';}
+  renderCases(getFiltered());
+}
+
+function init() {
+  const d = getSiteData();
+  allCases = d.cases || [];
+  buildFilters();
+  renderCases(allCases);
+}
+
+function buildFilters() {
+  const tags = new Set();
+  allCases.forEach(c => (c.tags_en||[]).forEach(t => tags.add(t)));
+  document.getElementById('filter-btns').innerHTML = [...tags].map(t =>
+    `<button class="fb" onclick="filter('${t}',this)">${t}</button>`).join('');
+}
+
+function filter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.fb').forEach(b => b.classList.remove('act'));
+  btn.classList.add('act');
+  renderCases(getFiltered());
+}
+
+function getFiltered() {
+  if (activeFilter==='all') return allCases;
+  return allCases.filter(c => (c.tags_en||[]).includes(activeFilter)||(c.tags_ar||[]).includes(activeFilter));
+}
+
+function renderCases(cases) {
+  const grid = document.getElementById('cases-grid');
+  if (!cases.length) { grid.innerHTML = `<div class="empty">${L()==='ar'?'لا توجد نتائج.':'No cases found.'}</div>`; return; }
+  grid.innerHTML = cases.map(c => `
+    <div class="case-card" onclick="openModal('${c.id}')">
+      <div class="cc-img">
+        <div class="cc-img-ph">${c.id.slice(-1)}</div>
+        ${c.image ? `<img src="${c.image}" alt="${T(c.title)}" onload="this.previousElementSibling.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">` : ''}
+      </div>
+      <div class="cc-body">
+        <div class="cc-meta">
+          <span class="cc-ind">${T(c.industry)}</span>
+          <span style="color:var(--g3);font-size:.58rem">·</span>
+          <span class="cc-date">${c.date||''}</span>
+          ${c.featured?`<span class="feat-badge">${L()==='ar'?'مختارة':'Featured'}</span>`:''}
+        </div>
+        <h3 class="cc-title">${T(c.title)}</h3>
+        <p class="cc-sum">${T(c.summary)}</p>
+        <div class="cc-mets">
+          ${(c.metrics||[]).slice(0,3).map(m=>`<div><div class="cm-v">${m.value}${m.unit||''}</div><div class="cm-l">${L()==='ar'?m.label_ar:m.label_en}</div></div>`).join('')}
+        </div>
+        <div class="cc-tags">
+          ${(L()==='ar'?c.tags_ar:c.tags_en||[]).map(t=>`<span class="ctag">${t}</span>`).join('')}
+        </div>
+        <div class="cc-read"><span>${L()==='ar'?'قراءة التفاصيل':'Read Full Case'}</span><span>${L()==='ar'?'←':'→'}</span></div>
+      </div>
+    </div>`).join('');
+}
+
+function openModal(id) {
+  const c = allCases.find(x=>x.id===id); if(!c) return;
+  document.getElementById('m-ind').textContent = T(c.industry);
+  document.getElementById('m-scope').textContent = T(c.scope)||'';
+  document.getElementById('m-title').textContent = T(c.title);
+  document.getElementById('m-challenge').textContent = T(c.challenge);
+  document.getElementById('m-intervention').textContent = T(c.intervention);
+  document.getElementById('m-results').textContent = T(c.results);
+  document.getElementById('m-mets').innerHTML = (c.metrics||[]).map(m=>`<div><div class="mm-v">${m.value}${m.unit||''}</div><div class="mm-l">${L()==='ar'?m.label_ar:m.label_en}</div></div>`).join('');
+  const img = document.getElementById('modal-img');
+  const wrap = document.getElementById('modal-img-wrap');
+  if (c.image) { img.src=c.image; img.style.display='block'; wrap.style.display=''; }
+  else { wrap.style.display='none'; }
+  document.getElementById('modal-ov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal() { document.getElementById('modal-ov').classList.remove('open'); document.body.style.overflow=''; }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+init();
+</script>
+</body>
+</html>

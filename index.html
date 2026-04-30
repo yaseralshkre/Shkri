@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yaser Al-Shkre | Strategic Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="site-data.js"></script>
+<script src="theme.js"></script>
+<style>
+/* ── TOKENS ── */
+:root {
+  --black:#0a0a0a; --white:#f5f3ef;
+  --teal:#2dd4bf; --teal2:rgba(45,212,191,.12); --teal3:#0d9488;
+  --g1:#161616; --g2:#222; --g3:#333; --g4:#666; --g5:#aaa; --g6:#ddd;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',sans-serif;
+  --ar:'Tajawal',sans-serif;
+  --radius:0px;
+}
+
+/* ── LANGUAGE SYSTEM ── */
+html[lang="ar"] { direction: rtl; }
+
+/* Font families per language */
+html[lang="en"] body                { font-family: var(--sans); }
+html[lang="ar"] body                { font-family: var(--ar); }
+html[lang="en"] .serif-text         { font-family: var(--serif); }
+html[lang="ar"] .serif-text         { font-family: var(--ar); font-weight: 300; }
+
+/* Hide/show language content */
+html[lang="ar"] .en  { display: none !important; }
+html[lang="en"] .ar  { display: none !important; }
+
+/* Arabic-specific size adjustments */
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 {
+  font-family: var(--ar);
+  font-weight: 300;
+  letter-spacing: 0;
+}
+html[lang="ar"] .hero-h1   { font-size: clamp(2rem,   4vw, 3.6rem); line-height: 1.35; }
+html[lang="ar"] .sec-title { font-size: clamp(1.7rem, 2.8vw, 2.4rem); }
+html[lang="ar"] .svc-title { font-size: 1.3rem; font-family: var(--ar); }
+html[lang="ar"] .about-name{ font-family: var(--ar); }
+html[lang="ar"] .contact-big{ font-family: var(--ar); font-size: clamp(1.8rem, 3vw, 2.8rem); }
+html[lang="ar"] .case-headline { font-family: var(--ar); font-size: 1.55rem; }
+html[lang="ar"] .val-title { font-size: .8rem; }
+html[lang="ar"] .ach-label { font-family: var(--ar); font-size: .88rem; }
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); line-height: 1.7; overflow-x: hidden; font-weight: 300; }
+img { display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(10,10,10,.92); backdrop-filter: blur(18px);
+  border-bottom: .5px solid rgba(255,255,255,.06);
+  transition: padding .3s;
+}
+nav.scrolled { padding: .8rem 4rem; }
+.nav-logo img { height: 30px; width: auto; }
+.nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+.nav-links a { color: var(--g5); font-size: .76rem; letter-spacing: .12em; text-transform: uppercase; transition: color .2s; }
+.nav-links a:hover { color: var(--teal); }
+.nav-right { display: flex; align-items: center; gap: .7rem; }
+.lang-btn {
+  background: transparent; border: .5px solid var(--g3); color: var(--g4);
+  padding: .3rem .85rem; font-size: .7rem; letter-spacing: .1em;
+  cursor: pointer; transition: all .2s; font-family: var(--sans);
+}
+.lang-btn:hover { border-color: var(--teal); color: var(--teal); }
+.nav-cta {
+  background: transparent; border: .5px solid var(--teal); color: var(--teal);
+  padding: .42rem 1.25rem; font-size: .7rem; letter-spacing: .12em;
+  text-transform: uppercase; transition: all .22s; font-family: var(--sans);
+  display: inline-block;
+}
+.nav-cta:hover { background: var(--teal); color: var(--black); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 4rem 5.5rem;
+}
+.hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity .5s; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(10,10,10,.93) 0%, rgba(10,10,10,.6) 55%, rgba(10,10,10,.88) 100%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.016) 1px, transparent 1px);
+  background-size: 90px 90px;
+}
+.hero-content { position: relative; z-index: 2; max-width: 860px; }
+.hero-label {
+  font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: var(--teal);
+  margin-bottom: 1.8rem; display: flex; align-items: center; gap: .9rem;
+}
+.hero-label::before { content: ''; width: 2rem; height: .5px; background: var(--teal); }
+html[lang="ar"] .hero-label { flex-direction: row-reverse; }
+html[lang="ar"] .hero-label::before { display: none; }
+html[lang="ar"] .hero-label::after { content: ''; width: 2rem; height: .5px; background: var(--teal); }
+.hero-h1 {
+  font-family: var(--serif); font-size: clamp(2.6rem, 4.6vw, 4.4rem); font-weight: 300;
+  line-height: 1.08; color: var(--white); margin-bottom: 1.4rem; letter-spacing: -.01em;
+}
+.hero-h1 em { font-style: italic; color: var(--g5); }
+.hero-sub { font-size: .92rem; color: var(--g4); max-width: 600px; margin-bottom: 2.8rem; line-height: 1.88; }
+.hero-btns { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--teal); color: var(--black); border: none;
+  padding: .82rem 2rem; font-size: .75rem; letter-spacing: .12em;
+  text-transform: uppercase; cursor: pointer; font-weight: 500;
+  display: inline-block; transition: all .22s;
+}
+.btn-primary:hover { background: var(--teal3); }
+.btn-ghost {
+  background: transparent; color: var(--g4); border: none;
+  font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+  cursor: pointer; display: inline-flex; align-items: center; gap: .5rem; transition: color .2s;
+}
+.btn-ghost:hover { color: var(--white); }
+.hero-stats {
+  position: absolute; right: 4rem; bottom: 5.5rem; z-index: 2;
+  display: flex; flex-direction: column; gap: 2rem; text-align: right;
+}
+html[lang="ar"] .hero-stats { right: auto; left: 4rem; text-align: left; }
+.stat-num { font-family: var(--serif); font-size: 2.8rem; font-weight: 300; color: var(--white); line-height: 1; }
+.stat-accent { color: var(--teal); }
+.stat-lbl { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--g4); margin-top: .15rem; }
+
+/* ── SECTIONS COMMON ── */
+section { padding: 6.5rem 4rem; }
+.sec-label {
+  font-size: .64rem; letter-spacing: .25em; text-transform: uppercase; color: var(--teal);
+  margin-bottom: .9rem; display: flex; align-items: center; gap: .7rem;
+}
+.sec-label::before { content: ''; width: 1.4rem; height: .5px; background: var(--teal); flex-shrink: 0; }
+html[lang="ar"] .sec-label { flex-direction: row-reverse; }
+html[lang="ar"] .sec-label::before { display: none; }
+html[lang="ar"] .sec-label::after { content: ''; width: 1.4rem; height: .5px; background: var(--teal); }
+.sec-title {
+  font-family: var(--serif); font-size: clamp(1.9rem, 3.2vw, 2.8rem); font-weight: 300;
+  color: var(--white); line-height: 1.15; margin-bottom: 1.3rem;
+}
+
+/* ── ACHIEVEMENTS ── */
+#achievements { background: var(--black); padding: 4rem 4rem 0; }
+.ach-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px; background: var(--g2); border: .5px solid var(--g2); margin-top: 3rem;
+}
+.ach-card { background: var(--black); padding: 2rem 1.8rem; transition: background .25s; }
+.ach-card:hover { background: var(--g1); }
+.ach-icon { font-size: 1.7rem; line-height: 1; margin-bottom: .6rem; }
+.ach-number { font-family: var(--serif); font-size: 3rem; font-weight: 300; color: var(--teal); line-height: 1; }
+html[lang="ar"] .ach-number { font-family: var(--ar); font-size: 2.4rem; }
+.ach-label { font-size: .8rem; color: var(--g4); line-height: 1.55; margin-top: .4rem; }
+
+/* ── VALUE ── */
+#value { background: var(--g1); }
+.value-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  margin-top: 3.5rem; border: .5px solid var(--g2);
+}
+.val-card { padding: 2.2rem; border: .5px solid var(--g2); transition: background .28s; }
+.val-card:hover { background: rgba(45,212,191,.03); }
+.val-num { font-family: var(--serif); font-size: 3rem; font-weight: 300; color: var(--g2); line-height: 1; margin-bottom: 1rem; }
+.val-title { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: .7rem; }
+.val-text { font-size: .88rem; color: var(--g4); line-height: 1.82; }
+
+/* ── SERVICES — large images ── */
+#services { background: var(--black); }
+.services-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 4rem; align-items: end; }
+.services-desc { font-size: .9rem; color: var(--g4); line-height: 1.92; }
+
+/* Service item — full image card layout */
+.svc-item {
+  display: grid; grid-template-columns: 280px 1fr; gap: 0;
+  border: .5px solid var(--g2); margin-bottom: .5px;
+  cursor: default; transition: border-color .25s; overflow: hidden;
+}
+.svc-item:hover { border-color: var(--teal); }
+.svc-img-wrap {
+  position: relative; overflow: hidden; background: var(--g1);
+  aspect-ratio: 4/3;
+}
+.svc-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .55s ease; display: block;
+}
+.svc-item:hover .svc-img-wrap img { transform: scale(1.05); }
+.svc-img-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+}
+.svc-img-placeholder span { font-family: var(--serif); font-size: 2.5rem; color: var(--g2); font-weight: 300; }
+.svc-content { padding: 2.2rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+.svc-idx { font-family: var(--serif); font-size: .9rem; color: var(--g3); margin-bottom: 1rem; }
+.svc-title {
+  font-family: var(--serif); font-size: 1.65rem; font-weight: 300;
+  color: var(--white); margin-bottom: .6rem; line-height: 1.2; transition: color .2s;
+}
+.svc-item:hover .svc-title { color: var(--teal); }
+.svc-sub { font-size: .8rem; color: var(--g4); line-height: 1.72; margin-bottom: 1.2rem; }
+.svc-items-list { display: flex; flex-direction: column; gap: .35rem; }
+.svc-item-bullet { display: flex; gap: .6rem; font-size: .78rem; color: var(--g4); align-items: baseline; line-height: 1.6; }
+.svc-item-dot { color: var(--teal); flex-shrink: 0; font-size: .6rem; margin-top: .3rem; }
+
+/* ── CASE STUDY ── */
+#case { background: var(--g1); }
+.case-wrapper { display: grid; grid-template-columns: 1fr 1.15fr; gap: 5.5rem; margin-top: 3.5rem; align-items: start; }
+.case-meta { position: sticky; top: 7rem; }
+.case-cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; margin-bottom: 2rem; }
+.case-tag {
+  display: inline-block; background: var(--teal2); color: var(--teal);
+  font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
+  padding: .28rem .72rem; margin-bottom: 1.2rem;
+}
+.case-headline { font-family: var(--serif); font-size: 1.85rem; font-weight: 300; line-height: 1.28; color: var(--white); margin-bottom: 1.8rem; }
+.case-impacts { display: flex; flex-direction: column; gap: 1.3rem; padding-top: 1.8rem; border-top: .5px solid var(--g2); }
+.impact-row { display: flex; gap: 1.1rem; align-items: baseline; }
+.impact-num { font-family: var(--serif); font-size: 2.3rem; font-weight: 300; color: var(--teal); line-height: 1; min-width: 4.5rem; }
+html[lang="ar"] .impact-num { font-family: var(--ar); }
+.impact-desc { font-size: .8rem; color: var(--g4); line-height: 1.6; }
+.case-steps { display: flex; flex-direction: column; gap: 1.2rem; }
+.step-block { padding: 1.8rem; border: .5px solid var(--g2); transition: border-color .28s; }
+.step-block:hover { border-color: var(--teal); }
+.step-num { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: .65rem; }
+.step-title { font-size: .88rem; font-weight: 500; color: var(--white); margin-bottom: .45rem; }
+.step-text { font-size: .8rem; color: var(--g4); line-height: 1.78; }
+.case-view-all {
+  display: inline-flex; align-items: center; gap: .5rem; margin-top: 2rem;
+  font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--teal); transition: gap .2s;
+}
+.case-view-all:hover { gap: .8rem; }
+
+/* ── TESTIMONIALS ── */
+#testimonials { background: var(--black); }
+.testi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; background: var(--g2); margin-top: 3.5rem; }
+.testi-card { background: var(--black); padding: 2.2rem; transition: background .25s; }
+.testi-card:hover { background: var(--g1); }
+.testi-qmark { font-family: var(--serif); font-size: 3.5rem; color: var(--teal); opacity: .3; line-height: .8; margin-bottom: .8rem; }
+.testi-text { font-size: .9rem; color: var(--g4); line-height: 1.88; margin-bottom: 1.5rem; font-style: italic; }
+html[lang="ar"] .testi-text { font-style: normal; }
+.testi-name { font-size: .8rem; font-weight: 500; color: var(--white); }
+.testi-role { font-size: .7rem; color: var(--teal); margin-top: .15rem; }
+
+/* ── ABOUT ── */
+#about { background: var(--g1); }
+.about-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5rem; align-items: center; margin-top: 3.5rem; }
+.about-photo-frame { position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--g2); border: .5px solid var(--g2); }
+.about-photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+.about-corner {
+  position: absolute; bottom: 1.3rem; right: 1.3rem;
+  background: rgba(10,10,10,.88); border: .5px solid var(--teal);
+  padding: .65rem 1rem; backdrop-filter: blur(8px);
+}
+html[lang="ar"] .about-corner { right: auto; left: 1.3rem; }
+.about-corner-num { font-family: var(--serif); font-size: 1.6rem; color: var(--teal); line-height: 1; }
+html[lang="ar"] .about-corner-num { font-family: var(--ar); }
+.about-corner-txt { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); }
+.about-name { font-family: var(--serif); font-size: 2.3rem; font-weight: 300; color: var(--white); margin-bottom: .2rem; }
+.about-role { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--teal); margin-bottom: 1.8rem; }
+.about-bio { font-size: .88rem; color: var(--g4); line-height: 1.92; margin-bottom: 1.8rem; }
+.pillars-box { padding: 1.3rem; border: .5px solid var(--g2); margin-bottom: 1.8rem; display: flex; flex-direction: column; gap: .9rem; }
+.pillar-row { display: flex; gap: 1rem; align-items: baseline; }
+.pillar-lbl { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); min-width: 6.5rem; flex-shrink: 0; }
+html[lang="ar"] .pillar-lbl { min-width: 7.5rem; letter-spacing: 0; }
+.pillar-txt { font-size: .8rem; color: var(--g4); }
+.quals-list { display: flex; flex-direction: column; gap: .45rem; }
+.qual-item { display: flex; gap: .7rem; font-size: .8rem; color: var(--g4); align-items: baseline; }
+.qual-dot { color: var(--teal); flex-shrink: 0; }
+
+/* ── CONTACT ── */
+#contact { background: var(--black); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5rem; align-items: start; }
+.contact-big { font-family: var(--serif); font-size: clamp(2.2rem, 3.8vw, 3.5rem); font-weight: 300; color: var(--white); line-height: 1.15; margin-bottom: 1.8rem; }
+.contact-note { font-size: .86rem; color: var(--g4); line-height: 1.88; margin-bottom: 2.2rem; }
+.contact-links { display: flex; flex-direction: column; gap: .8rem; }
+.ct-link { display: flex; align-items: center; gap: 1rem; color: var(--g4); font-size: .82rem; padding: .75rem 0; border-bottom: .5px solid var(--g2); transition: color .2s; }
+.ct-link:hover { color: var(--teal); }
+.ct-type { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--g3); min-width: 4.5rem; flex-shrink: 0; }
+.form { display: flex; flex-direction: column; gap: 1rem; }
+.f-group { display: flex; flex-direction: column; gap: .3rem; }
+.f-label { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--g4); }
+.f-input, .f-textarea {
+  background: rgba(255,255,255,.03); border: .5px solid var(--g2); color: var(--white);
+  padding: .78rem .9rem; font-size: .85rem; transition: border-color .2s; outline: none; resize: none; width: 100%;
+}
+html[lang="ar"] .f-input, html[lang="ar"] .f-textarea { font-family: var(--ar); }
+.f-input:focus, .f-textarea:focus { border-color: var(--teal); }
+.f-textarea { min-height: 110px; }
+.f-submit {
+  background: var(--teal); color: var(--black); border: none;
+  padding: .9rem 2rem; font-size: .75rem; letter-spacing: .12em;
+  text-transform: uppercase; cursor: pointer; font-weight: 500;
+  transition: background .2s; align-self: flex-start;
+}
+.f-submit:hover { background: var(--teal3); }
+
+/* Keep numerals always Western regardless of RTL */
+.stat-num, .ach-number, .impact-num, .val-num, .about-corner-num {
+  unicode-bidi: isolate;
+  font-variant-numeric: lining-nums;
+}
+html[lang="ar"] .stat-num, html[lang="ar"] .ach-number,
+html[lang="ar"] .impact-num, html[lang="ar"] .val-num {
+  font-family: var(--serif);
+}
+
+/* FOOTER */
+footer { background: var(--black); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; border-top: .5px solid var(--g2); }
+.footer-copy { font-size: .68rem; color: var(--g3); letter-spacing: .05em; }
+.footer-logo img { height: 26px; }
+
+/* ── WHATSAPP WIDGET ── */
+#wa-widget {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
+  flex-direction: column; align-items: flex-end; gap: .6rem;
+  display: flex; /* JS hides it if disabled */
+}
+html[lang="ar"] #wa-widget { right: auto; left: 2rem; align-items: flex-start; }
+.wa-tooltip {
+  background: #fff; color: #111; font-size: .75rem;
+  padding: .55rem 1rem; box-shadow: 0 4px 20px rgba(0,0,0,.18);
+  max-width: 210px; line-height: 1.5; position: relative;
+  animation: wa-up .35s ease;
+}
+.wa-tooltip::after {
+  content: ''; position: absolute; bottom: -6px; right: 18px;
+  border: 6px solid transparent; border-top-color: #fff; border-bottom: none;
+}
+html[lang="ar"] .wa-tooltip::after { right: auto; left: 18px; }
+.wa-btn {
+  display: flex; align-items: center; gap: .6rem;
+  color: white; border: none; padding: .78rem 1.4rem .78rem 1.1rem;
+  border-radius: 50px; cursor: pointer;
+  font-size: .8rem; font-weight: 500;
+  box-shadow: 0 4px 20px rgba(37,211,102,.38);
+  transition: all .25s; animation: wa-up .35s ease;
+}
+.wa-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(37,211,102,.48); }
+.wa-btn svg { flex-shrink: 0; }
+@keyframes wa-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── SCROLL ANIMATION ── */
+.fi { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+.fi.vis { opacity: 1; transform: translateY(0); }
+
+/* ── MOBILE ── */
+@media(max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  section, #hero { padding: 5rem 1.5rem 4rem; }
+  #achievements { padding: 4rem 1.5rem 0; }
+  .hero-stats { display: none; }
+  .ach-grid { grid-template-columns: 1fr 1fr; }
+  .value-grid, .services-intro, .case-wrapper, .about-wrapper, .contact-grid, .testi-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .svc-item { grid-template-columns: 1fr; }
+  .svc-img-wrap { aspect-ratio: 16/9; }
+  .case-meta { position: static; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+  #wa-widget { bottom: 1.2rem; right: 1.2rem; }
+  html[lang="ar"] #wa-widget { left: 1.2rem; right: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></a>
+  <ul class="nav-links">
+    <li><a href="#value"   class="en">Approach</a>   <a href="#value"   class="ar">المنهجية</a></li>
+    <li><a href="#services" class="en">Services</a>   <a href="#services" class="ar">الخدمات</a></li>
+    <li><a href="#case"    class="en">Case Studies</a><a href="#case"    class="ar">دراسات الحالة</a></li>
+    <li><a href="#about"   class="en">About</a>       <a href="#about"   class="ar">عن المستشار</a></li>
+    <li><a href="cases.html" class="en">All Cases</a> <a href="cases.html" class="ar">جميع الحالات</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="lang-btn" onclick="toggleLang()">عربي</button>
+    <a href="#contact" class="nav-cta en">Book a Call</a>
+    <a href="#contact" class="nav-cta ar">احجز استشارة</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content fi">
+    <div class="hero-label">
+      <span class="en">Strategic Consulting · GCC Market</span>
+      <span class="ar">استشارات استراتيجية · سوق الخليج</span>
+    </div>
+    <h1 class="hero-h1" id="hero-headline"></h1>
+    <p class="hero-sub" id="hero-sub"></p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary" id="hero-cta-en">Book Your Strategic Call</a>
+      <a href="#contact" class="btn-primary ar" id="hero-cta-ar">احجز استشارتك الاستراتيجية</a>
+      <a href="#services" class="btn-ghost en">Explore Services →</a>
+      <a href="#services" class="btn-ghost ar">← استعرض الخدمات</a>
+    </div>
+  </div>
+  <div class="hero-stats fi" id="hero-stats"></div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="fi">
+    <div class="sec-label"><span class="en">Impact in Numbers</span><span class="ar">الأثر بالأرقام</span></div>
+    <h2 class="sec-title en serif-text">Proven expertise.<br>Measurable results.</h2>
+    <h2 class="sec-title ar">خبرة موثّقة.<br>نتائج قابلة للقياس.</h2>
+  </div>
+  <div class="ach-grid fi" id="ach-grid"></div>
+</section>
+
+<!-- VALUE / APPROACH -->
+<section id="value">
+  <div class="fi">
+    <div class="sec-label"><span class="en">Our Approach</span><span class="ar">منهجيتنا</span></div>
+    <h2 class="sec-title en serif-text">We don't just provide advice;<br>we build living ecosystems.</h2>
+    <h2 class="sec-title ar">لا نقدم مشورة فحسب؛<br>نبني أنظمة حية متكاملة.</h2>
+  </div>
+  <div class="value-grid fi" id="value-grid"></div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-intro fi">
+    <div>
+      <div class="sec-label"><span class="en">Consulting Services</span><span class="ar">خدمات الاستشارات</span></div>
+      <h2 class="sec-title en serif-text">Four specializations.<br>One integrated vision.</h2>
+      <h2 class="sec-title ar">أربعة تخصصات.<br>رؤية واحدة متكاملة.</h2>
+    </div>
+    <p class="services-desc en">With nearly two decades of experience in the GCC market, each engagement is a deep, structured transformation. We work alongside leadership until results are locked in.</p>
+    <p class="services-desc ar">بما يقارب عقدين من الخبرة في سوق الخليج، كل تعاون هو تحول منهجي عميق. نعمل جنباً إلى جنب مع القيادة حتى تترسّخ النتائج.</p>
+  </div>
+  <div id="services-list" class="fi"></div>
+  <div class="fi" style="margin-top:2.5rem;display:flex;justify-content:flex-end">
+    <a href="services.html" class="case-view-all en">View All Services →</a>
+    <a href="services.html" class="case-view-all ar">← عرض جميع الخدمات</a>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section id="case">
+  <div class="sec-label fi"><span class="en">Proven Results</span><span class="ar">نتائج موثّقة</span></div>
+  <div class="case-wrapper fi" id="case-section"></div>
+  <div class="fi" style="margin-top:2rem">
+    <a href="cases.html" class="case-view-all en">View All Case Studies →</a>
+    <a href="cases.html" class="case-view-all ar">← عرض جميع دراسات الحالة</a>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="fi">
+    <div class="sec-label"><span class="en">Client Voices</span><span class="ar">آراء العملاء</span></div>
+    <h2 class="sec-title en serif-text">What leaders say.</h2>
+    <h2 class="sec-title ar">ما يقوله القادة.</h2>
+  </div>
+  <div class="testi-grid fi" id="testi-grid"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-label fi"><span class="en">The Consultant</span><span class="ar">عن المستشار</span></div>
+  <div class="about-wrapper fi" id="about-section"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid fi">
+    <div>
+      <div class="sec-label"><span class="en">Get in Touch</span><span class="ar">تواصل معنا</span></div>
+      <h2 class="contact-big serif-text" id="ct-head"></h2>
+      <p class="contact-note" id="ct-note"></p>
+      <div class="contact-links" id="ct-links"></div>
+    </div>
+    <form class="form" id="contact-form" onsubmit="submitForm(event)">
+      <div id="form-fields-wrap"></div>
+      <button type="submit" class="f-submit en">Send Message →</button>
+      <button type="submit" class="f-submit ar">← إرسال الرسالة</button>
+    </form>
+  </div>
+</section>
+
+<!-- WHATSAPP WIDGET -->
+<div id="wa-widget">
+  <div class="wa-tooltip" id="wa-tooltip"></div>
+  <button class="wa-btn" id="wa-btn" onclick="openWA()" aria-label="WhatsApp">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span id="wa-label">Chat with us</span>
+  </button>
+</div>
+
+<footer>
+  <div class="footer-copy en">© 2025 Yaser Ahmed Al-Shkre. All rights reserved.</div>
+  <div class="footer-copy ar">© 2025 ياسر أحمد الشكري. جميع الحقوق محفوظة.</div>
+  <div class="footer-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></div>
+</footer>
+
+<script>
+// ── Temporary Unsplash images ──────────────────────────
+const TEMP = {
+  hero:      'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80&fit=crop',
+  consultant:'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80&fit=crop',
+  cases:     ['https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80&fit=crop',
+              'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&q=80&fit=crop',
+              'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=900&q=80&fit=crop'],
+  services:  ['https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80&fit=crop',
+              'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80&fit=crop',
+              'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80&fit=crop',
+              'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80&fit=crop'],
+};
+
+function injectTemps(d) {
+  if (!d.hero.image)  d.hero.image  = TEMP.hero;
+  if (!d.about.photo) d.about.photo = TEMP.consultant;
+  (d.cases    || []).forEach((c,i) => { if (!c.image) c.image = TEMP.cases[i % TEMP.cases.length]; });
+  (d.services || []).forEach((s,i) => { if (!s.image) s.image = TEMP.services[i % TEMP.services.length]; });
+  return d;
+}
+
+// ── Language ───────────────────────────────────────────
+const L = () => document.documentElement.lang;
+const T = o  => o ? (o[L()] || o.en || '') : '';
+
+function toggleLang() {
+  const h = document.documentElement, btn = document.getElementById('lang-btn');
+  if (h.lang === 'en') { h.lang = 'ar'; h.dir = 'rtl'; btn.textContent = 'English'; }
+  else                  { h.lang = 'en'; h.dir = 'ltr'; btn.textContent = 'عربي'; }
+  renderAll();
+}
+
+// ── Render ─────────────────────────────────────────────
+function renderAll() {
+  const d = injectTemps(getSiteData());
+  renderHero(d.hero);
+  renderAchievements(d.achievements || []);
+  renderValues(d.hero.values || []);
+  renderServices(d.services || []);
+  renderFeaturedCase(d.cases || []);
+  renderTestimonials(d.about.testimonials || []);
+  renderAbout(d.about);
+  renderContact(d.contact);
+  renderWhatsApp(d.whatsapp || {});
+}
+
+function renderHero(h) {
+  document.getElementById('hero-bg').style.backgroundImage = `url('${h.image}')`;
+  document.getElementById('hero-headline').innerHTML = T(h.headline);
+  document.getElementById('hero-sub').textContent    = T(h.sub);
+  // CTA buttons already in HTML, just update text
+  const ctaEn = document.getElementById('hero-cta-en');
+  const ctaAr = document.getElementById('hero-cta-ar');
+  if (ctaEn && h.cta?.en) ctaEn.textContent = h.cta.en;
+  if (ctaAr && h.cta?.ar) ctaAr.textContent = h.cta.ar;
+  document.getElementById('hero-stats').innerHTML = (h.stats || []).map(s => `
+    <div>
+      <div class="stat-num"><span class="stat-accent">${s.num}</span></div>
+      <div class="stat-lbl">${T(s.label)}</div>
+    </div>`).join('');
+}
+
+function renderAchievements(achs) {
+  const sec = document.getElementById('achievements');
+  const grid = document.getElementById('ach-grid');
+  if (!achs.length) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  grid.innerHTML = achs.map(a => `
+    <div class="ach-card">
+      <div class="ach-icon">${a.icon || '◆'}</div>
+      <div class="ach-number">${a.number}</div>
+      <div class="ach-label">${T(a.label)}</div>
+    </div>`).join('');
+}
+
+function renderValues(vals) {
+  document.getElementById('value-grid').innerHTML = vals.map(v => `
+    <div class="val-card">
+      <div class="val-num">${v.num}</div>
+      <div class="val-title">${T(v.title)}</div>
+      <p class="val-text">${T(v.text)}</p>
+    </div>`).join('');
+}
+
+function renderServices(svcs) {
+  document.getElementById('services-list').innerHTML = svcs.map((s, i) => `
+    <div class="svc-item">
+      <div class="svc-img-wrap">
+        <div class="svc-img-placeholder"><span>0${i+1}</span></div>
+        ${s.image ? `<img src="${s.image}" alt="${T(s.title)}" onload="this.previousElementSibling.style.display='none'">` : ''}
+      </div>
+      <div class="svc-content">
+        <div class="svc-idx">0${i+1}</div>
+        <h3 class="svc-title">${T(s.title)}</h3>
+        <p class="svc-sub">${T(s.sub)}</p>
+        ${(s.items||[]).length ? `
+        <div class="svc-items-list">
+          ${(s.items||[]).slice(0,3).map(it => `
+            <div class="svc-item-bullet">
+              <span class="svc-item-dot">◆</span>
+              <span>${T(it)}</span>
+            </div>`).join('')}
+        </div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function renderFeaturedCase(cases) {
+  const c = cases.find(x => x.featured) || cases[0];
+  if (!c) return;
+  const l = L();
+  document.getElementById('case-section').innerHTML = `
+    <div class="case-meta">
+      ${c.image ? `<img class="case-cover" src="${c.image}" alt="">` : ''}
+      <div class="case-tag">${T(c.industry)}</div>
+      <h3 class="case-headline serif-text">${T(c.title)}</h3>
+      <div class="case-impacts">
+        ${(c.metrics||[]).map(m=>`
+          <div class="impact-row">
+            <div class="impact-num">${m.value}${m.unit||''}</div>
+            <div class="impact-desc">${l==='ar'?m.label_ar:m.label_en}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="case-steps">
+      <div class="step-block">
+        <div class="step-num">${l==='ar'?'التحدي':'The Challenge'}</div>
+        <div class="step-title">${T(c.industry)}</div>
+        <p class="step-text">${T(c.challenge)}</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">${l==='ar'?'التدخل الاستراتيجي':'The Intervention'}</div>
+        <div class="step-title">${T(c.scope)||''}</div>
+        <p class="step-text">${T(c.intervention)}</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">${l==='ar'?'النتائج':'The Results'}</div>
+        <div class="step-title">${l==='ar'?'الأثر التجاري':'Business Impact'}</div>
+        <p class="step-text">${T(c.results)}</p>
+      </div>
+    </div>`;
+}
+
+function renderTestimonials(testis) {
+  const sec = document.getElementById('testimonials');
+  if (!testis.length) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  document.getElementById('testi-grid').innerHTML = testis.map(t => `
+    <div class="testi-card">
+      <div class="testi-qmark">"</div>
+      <p class="testi-text">${T(t.quote)}</p>
+      <div class="testi-name">${t.name}</div>
+      <div class="testi-role">${t.role}</div>
+    </div>`).join('');
+}
+
+function renderAbout(ab) {
+  document.getElementById('about-section').innerHTML = `
+    <div>
+      <div class="about-photo-frame">
+        <img src="${ab.photo}" alt="${T(ab.name)}">
+      </div>
+      <div class="about-corner">
+        <div class="about-corner-num">${ab.years}+</div>
+        <div class="about-corner-txt">${L()==='ar'?'سنة خبرة':'Years Exp.'}</div>
+      </div>
+    </div>
+    <div>
+      <h2 class="about-name">${T(ab.name)}</h2>
+      <div class="about-role">${T(ab.role)}</div>
+      <p class="about-bio">${T(ab.bio)}</p>
+      <div class="pillars-box">
+        ${(ab.pillars||[]).map(p=>`
+          <div class="pillar-row">
+            <span class="pillar-lbl">${T(p.label)}</span>
+            <span class="pillar-txt">${T(p.text)}</span>
+          </div>`).join('')}
+      </div>
+      <div class="quals-list">
+        ${(ab.quals||[]).map(q=>`
+          <div class="qual-item">
+            <span class="qual-dot">◆</span>
+            <span>${T(q)}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderContact(ct) {
+  document.getElementById('ct-head').textContent = T(ct.head);
+  document.getElementById('ct-note').textContent = T(ct.note);
+  document.getElementById('ct-links').innerHTML = [
+    ct.wa       ? `<a href="https://wa.me/${(ct.wa||'').replace(/\D/g,'')}" target="_blank" class="ct-link"><span class="ct-type">WhatsApp</span><span>${ct.wa}</span></a>` : '',
+    ct.email    ? `<a href="mailto:${ct.email}" class="ct-link"><span class="ct-type">Email</span><span>${ct.email}</span></a>` : '',
+    ct.cal      ? `<a href="${ct.cal}" target="_blank" class="ct-link"><span class="ct-type en">Schedule</span><span class="ct-type ar">الجدولة</span><span>${L()==='ar'?'احجز مكالمة استراتيجية ←':'Book a 30-min Strategy Call →'}</span></a>` : '',
+    ct.linkedin ? `<a href="${ct.linkedin}" target="_blank" class="ct-link"><span class="ct-type">LinkedIn</span><span>${ct.linkedin.replace('https://','')}</span></a>` : '',
+  ].join('');
+  document.getElementById('form-fields-wrap').innerHTML = (ct.formFields||[]).map((f,i)=>{
+    const lbl = T(f.label);
+    const isTA = i === (ct.formFields.length-1);
+    return `<div class="f-group" style="margin-bottom:.8rem">
+      <label class="f-label">${lbl}</label>
+      ${isTA ? `<textarea class="f-textarea" name="f${i}" placeholder="${lbl}"></textarea>` : `<input class="f-input" type="text" name="f${i}" placeholder="${lbl}">`}
+    </div>`;
+  }).join('');
+}
+
+// ── WhatsApp Widget ────────────────────────────────────
+function renderWhatsApp(wa) {
+  const widget  = document.getElementById('wa-widget');
+  const btn     = document.getElementById('wa-btn');
+  const label   = document.getElementById('wa-label');
+  const tooltip = document.getElementById('wa-tooltip');
+
+  // Hide first
+  widget.style.display = 'none';
+
+  // Use defaults if wa is missing fields
+  const enabled = wa.enabled !== false; // default true
+  const number  = wa.number  || '966500000000';
+
+  if (!enabled) return;
+
+  // Content
+  label.textContent   = (wa.bubble_text ? T(wa.bubble_text) : null) || (L()==='ar' ? 'تواصل معنا' : 'Chat with us');
+  tooltip.textContent = (wa.tooltip     ? T(wa.tooltip)     : null) || '';
+
+  // Color & style
+  const col = wa.color || '#25D366';
+  btn.style.background = col;
+  btn.style.boxShadow  = `0 4px 20px ${col}55`;
+
+  // Position
+  if (wa.position === 'bottom-left') {
+    widget.style.right = 'auto'; widget.style.left = '2rem'; widget.style.alignItems = 'flex-start';
+  } else {
+    widget.style.right = '2rem'; widget.style.left = 'auto'; widget.style.alignItems = 'flex-end';
+  }
+
+  // Show/hide tooltip
+  tooltip.style.display = tooltip.textContent.trim() ? 'block' : 'none';
+
+  // Show widget — 0 delay always (no dependency on setTimeout)
+  widget.style.display = 'flex';
+}
+
+function openWA() {
+  const d   = getSiteData();
+  const wa  = d.whatsapp || {};
+  const num = (wa.number || '966500000000').replace(/\D/g,'');
+  const msg = (wa.greeting ? T(wa.greeting) : '') || '';
+  window.open(`https://wa.me/${num}${msg ? '?text='+encodeURIComponent(msg) : ''}`, '_blank');
+}
+
+// ── Contact form ───────────────────────────────────────
+function submitForm(e) {
+  e.preventDefault();
+  const inbox = JSON.parse(localStorage.getItem('yas_inbox') || '[]');
+  const fields = {};
+  new FormData(e.target).forEach((v,k) => fields[k] = v);
+  inbox.push({ id:'msg'+Date.now(), date:new Date().toLocaleDateString(), read:false, name:fields.f0||'Anonymous', company:fields.f1||'', email:fields.f2||'', message:fields.f3||'' });
+  localStorage.setItem('yas_inbox', JSON.stringify(inbox));
+  e.target.reset();
+  const btns = e.target.querySelectorAll('.f-submit');
+  btns.forEach(b => { const o=b.textContent; b.textContent = L()==='ar'?'✓ تم الإرسال!':'✓ Sent!'; b.style.background='#0d9488'; setTimeout(()=>{ b.textContent=o; b.style.background=''; },3000); });
+}
+
+// ── Scroll & Intersection ─────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+// ── Init ──────────────────────────────────────────────
+renderAll();
+</script>
+</body>
+</html>

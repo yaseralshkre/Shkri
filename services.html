@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services | Yaser Al-Shkre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="site-data.js"></script>
+<script src="theme.js"></script>
+<style>
+/* ── TOKENS ── */
+:root {
+  --black:#0a0a0a; --white:#f5f3ef;
+  --teal:#2dd4bf; --teal2:rgba(45,212,191,.12); --teal3:#0d9488;
+  --g1:#161616; --g2:#222; --g3:#333; --g4:#666; --g5:#aaa;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',sans-serif;
+  --ar:'Tajawal',sans-serif;
+}
+
+/* ── LANGUAGE ── */
+html[lang="ar"] { direction: rtl; }
+html[lang="en"] body { font-family: var(--sans); }
+html[lang="ar"] body { font-family: var(--ar); }
+html[lang="ar"] .en { display: none !important; }
+html[lang="en"] .ar { display: none !important; }
+
+/* Arabic typography fixes */
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4 { font-family: var(--ar); font-weight: 300; letter-spacing: 0; }
+html[lang="ar"] .page-title-serif { font-family: var(--ar); font-size: clamp(2rem,4vw,3.4rem); line-height:1.35; }
+html[lang="ar"] .svc-card-title   { font-family: var(--ar); font-size: 1.5rem; line-height:1.3; }
+html[lang="ar"] .modal-svc-title  { font-family: var(--ar); font-size: 2rem; line-height:1.3; }
+
+/* Keep numerals always in Western/Latin style regardless of language */
+.svc-num, .ps-num, .svc-img-ph span, .modal-tag {
+  font-family: var(--serif) !important;
+  unicode-bidi: isolate;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); line-height: 1.7; overflow-x: hidden; font-weight: 300; }
+img { display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(10,10,10,.92); backdrop-filter: blur(18px);
+  border-bottom: .5px solid rgba(255,255,255,.06);
+}
+.nav-logo img { height: 30px; }
+.nav-links { display:flex; align-items:center; gap:2.5rem; list-style:none; }
+.nav-links a { color:var(--g5); font-size:.76rem; letter-spacing:.12em; text-transform:uppercase; transition:color .2s; }
+.nav-links a:hover, .nav-links a.active { color:var(--teal); }
+.nav-right { display:flex; align-items:center; gap:.7rem; }
+.lang-btn {
+  background:transparent; border:.5px solid var(--g3); color:var(--g4);
+  padding:.3rem .85rem; font-size:.7rem; letter-spacing:.1em;
+  cursor:pointer; transition:all .2s; font-family:var(--sans);
+}
+.lang-btn:hover { border-color:var(--teal); color:var(--teal); }
+.nav-cta {
+  background:transparent; border:.5px solid var(--teal); color:var(--teal);
+  padding:.42rem 1.25rem; font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; transition:all .22s; font-family:var(--sans); display:inline-block;
+}
+.nav-cta:hover { background:var(--teal); color:var(--black); }
+
+/* ── PAGE HERO ── */
+.page-hero {
+  padding: 10rem 4rem 4.5rem;
+  background: var(--g1);
+  border-bottom: .5px solid var(--g2);
+  position: relative; overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute; top:0; right:0;
+  width: 45%; height: 100%;
+  background: radial-gradient(ellipse at right, rgba(45,212,191,.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+html[lang="ar"] .page-hero::before { right:auto; left:0; }
+.page-hero-inner { position: relative; z-index: 1; max-width: 700px; }
+.ph-label {
+  font-size:.64rem; letter-spacing:.26em; text-transform:uppercase; color:var(--teal);
+  margin-bottom:.9rem; display:flex; align-items:center; gap:.8rem;
+}
+.ph-label::before { content:''; width:1.4rem; height:.5px; background:var(--teal); }
+html[lang="ar"] .ph-label { flex-direction:row-reverse; }
+html[lang="ar"] .ph-label::before { display:none; }
+html[lang="ar"] .ph-label::after { content:''; width:1.4rem; height:.5px; background:var(--teal); }
+.page-title-serif {
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 4.5vw, 4.2rem);
+  font-weight: 300; line-height: 1.08;
+  color: var(--white); margin-bottom: .8rem;
+}
+.page-sub-text { font-size:.9rem; color:var(--g4); max-width:520px; line-height:1.88; }
+
+/* ── FILTER TABS ── */
+.filter-bar {
+  padding: 1rem 4rem;
+  background: var(--black);
+  border-bottom: .5px solid var(--g2);
+  display: flex; gap:.6rem; flex-wrap:wrap; align-items:center;
+}
+.filter-lbl { font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--g3); margin-right:.3rem; }
+html[lang="ar"] .filter-lbl { margin-right:0; margin-left:.3rem; }
+.fb {
+  background:transparent; border:.5px solid var(--g2); color:var(--g4);
+  padding:.32rem .9rem; font-size:.68rem; cursor:pointer; transition:all .18s;
+}
+html[lang="ar"] .fb { font-family:var(--ar); }
+.fb:hover { border-color:var(--g3); color:var(--white); }
+.fb.act { border-color:var(--teal); color:var(--teal); background:var(--teal2); }
+
+/* ── SERVICES GRID ── */
+.svcs-wrap { padding: 3rem 4rem 6rem; }
+
+/* Full-width service card */
+.svc-card {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  border: .5px solid var(--g2);
+  margin-bottom: .5px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .25s;
+  background: var(--black);
+}
+.svc-card:hover { border-color: var(--teal); }
+html[lang="ar"] .svc-card { direction: rtl; }
+
+/* Alternating layout every 2 cards */
+.svc-card:nth-child(even) { grid-template-columns: 1fr 420px; }
+.svc-card:nth-child(even) .svc-card-img  { order: 2; }
+.svc-card:nth-child(even) .svc-card-body { order: 1; }
+
+.svc-card-img {
+  position: relative; overflow: hidden;
+  background: var(--g1);
+  aspect-ratio: auto; min-height: 340px;
+}
+.svc-card-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s ease;
+}
+.svc-card:hover .svc-card-img img { transform: scale(1.05); }
+.svc-img-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+.svc-img-ph span {
+  font-family: var(--serif);
+  font-size: 5rem; font-weight: 300; color: var(--g2); line-height: 1;
+}
+html[lang="ar"] .svc-img-ph span { font-family: var(--ar); font-size: 3.5rem; }
+
+.svc-card-body { padding: 3rem 3.5rem; display: flex; flex-direction: column; justify-content: center; }
+.svc-card-idx {
+  font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: .7rem;
+}
+.svc-card-idx::after { content:''; flex:1; height:.5px; background:var(--g2); }
+.svc-num { font-family: var(--serif); font-size: 1rem; color: var(--teal); }
+html[lang="ar"] .svc-num { font-family: var(--ar); }
+
+.svc-card-title {
+  font-family: var(--serif);
+  font-size: 2.2rem; font-weight: 300; line-height: 1.15;
+  color: var(--white); margin-bottom: .7rem;
+  transition: color .2s;
+}
+.svc-card:hover .svc-card-title { color: var(--teal); }
+.svc-card-sub { font-size: .82rem; color: var(--g4); line-height: 1.72; margin-bottom: 1.5rem; }
+.svc-card-desc { font-size: .88rem; color: var(--g4); line-height: 1.9; margin-bottom: 1.8rem; }
+
+.svc-bullets { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; }
+.svc-bullet { display: flex; gap: .7rem; font-size: .8rem; color: var(--g4); align-items: baseline; line-height: 1.65; }
+.svc-bullet-dot { color: var(--teal); flex-shrink: 0; font-size: .55rem; margin-top: .35rem; }
+
+.svc-cta {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--teal); border: .5px solid var(--teal);
+  padding: .6rem 1.3rem; transition: all .22s; align-self: flex-start;
+  background: transparent;
+}
+.svc-cta:hover { background: var(--teal); color: var(--black); }
+
+/* ── PROCESS STRIP ── */
+.process-strip {
+  background: var(--g1); padding: 5rem 4rem;
+  border-top: .5px solid var(--g2);
+}
+.process-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px; background: var(--g2); margin-top: 3rem;
+}
+.process-step { background: var(--g1); padding: 2.2rem; transition: background .25s; }
+.process-step:hover { background: var(--black); }
+.ps-num {
+  font-family: var(--serif); font-size: 3.5rem; font-weight: 300;
+  color: var(--g2); line-height: 1; margin-bottom: 1rem;
+}
+html[lang="ar"] .ps-num { font-family: var(--ar); font-size: 2.8rem; }
+.ps-title { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: .65rem; }
+html[lang="ar"] .ps-title { letter-spacing: 0; }
+.ps-text { font-size: .85rem; color: var(--g4); line-height: 1.82; }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  background: var(--black); padding: 5rem 4rem;
+  border-top: .5px solid var(--g2);
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 4rem; align-items: center;
+}
+.cta-headline {
+  font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300; color: var(--white); line-height: 1.2;
+}
+html[lang="ar"] .cta-headline { font-family: var(--ar); font-size: clamp(1.7rem, 3vw, 2.5rem); }
+.cta-sub { font-size: .88rem; color: var(--g4); margin-top: .8rem; line-height: 1.8; }
+.cta-btns { display: flex; flex-direction: column; gap: .8rem; align-items: flex-end; flex-shrink: 0; }
+html[lang="ar"] .cta-btns { align-items: flex-start; }
+.btn-primary-lg {
+  background: var(--teal); color: var(--black); border: none;
+  padding: .9rem 2.2rem; font-size: .76rem; letter-spacing: .12em;
+  text-transform: uppercase; cursor: pointer; font-weight: 500;
+  display: inline-block; transition: all .22s; white-space: nowrap;
+}
+.btn-primary-lg:hover { background: var(--teal3); }
+.btn-ghost-sm {
+  font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--g4); display: inline-flex; align-items: center; gap: .4rem;
+  transition: color .2s;
+}
+.btn-ghost-sm:hover { color: var(--white); }
+
+/* ── MODAL ── */
+.modal-ov {
+  position: fixed; inset: 0; background: rgba(0,0,0,.88);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 2rem; opacity: 0; pointer-events: none; transition: opacity .28s;
+}
+.modal-ov.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--g1); border: .5px solid var(--g2);
+  max-width: 860px; width: 100%; max-height: 88vh; overflow-y: auto;
+  transform: translateY(20px); transition: transform .28s;
+}
+.modal-ov.open .modal { transform: translateY(0); }
+.modal-hdr {
+  position: sticky; top: 0; background: var(--g1);
+  border-bottom: .5px solid var(--g2); padding: .9rem 1.4rem;
+  display: flex; justify-content: space-between; align-items: center; z-index: 5;
+}
+.modal-close {
+  background: transparent; border: .5px solid var(--g2); color: var(--g4);
+  width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: .85rem; transition: all .15s;
+}
+.modal-close:hover { border-color: var(--teal); color: var(--teal); }
+.modal-img { aspect-ratio: 16/8; overflow: hidden; background: var(--g2); position: relative; }
+.modal-img img { width: 100%; height: 100%; object-fit: cover; }
+.modal-img-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+.modal-img-ph span { font-family: var(--serif); font-size: 6rem; font-weight: 300; color: var(--g2); }
+html[lang="ar"] .modal-img-ph span { font-family: var(--ar); font-size: 4rem; }
+.modal-body { padding: 2.5rem; }
+.modal-tag {
+  display: inline-block; background: var(--teal2); color: var(--teal);
+  font-size: .58rem; letter-spacing: .15em; text-transform: uppercase;
+  padding: .25rem .7rem; margin-bottom: 1.1rem;
+}
+.modal-svc-title {
+  font-family: var(--serif); font-size: 2.4rem; font-weight: 300;
+  color: var(--white); line-height: 1.15; margin-bottom: 1rem;
+}
+.modal-svc-sub { font-size: .85rem; color: var(--teal); margin-bottom: 1.8rem; letter-spacing: .05em; }
+.modal-svc-desc { font-size: .9rem; color: var(--g4); line-height: 1.92; margin-bottom: 2rem; }
+.modal-items-title {
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.modal-items-title::after { content: ''; flex: 1; height: .5px; background: var(--g2); }
+.modal-items { display: flex; flex-direction: column; gap: .9rem; margin-bottom: 2rem; }
+.modal-item {
+  padding: 1.2rem 1.5rem; border: .5px solid var(--g2);
+  transition: border-color .2s; display: flex; gap: 1rem; align-items: baseline;
+}
+.modal-item:hover { border-color: var(--teal); }
+.modal-item-dot { color: var(--teal); font-size: .55rem; flex-shrink: 0; margin-top: .4rem; }
+.modal-item-text { font-size: .85rem; color: var(--g4); line-height: 1.75; }
+.modal-cta {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: var(--teal); color: var(--black); border: none;
+  padding: .85rem 2rem; font-size: .75rem; letter-spacing: .12em;
+  text-transform: uppercase; cursor: pointer; font-weight: 500;
+  transition: background .2s;
+}
+.modal-cta:hover { background: var(--teal3); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--black); padding: 2.5rem 4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: .5px solid var(--g2);
+}
+.footer-copy { font-size: .68rem; color: var(--g3); }
+.footer-logo img { height: 26px; }
+
+/* ── ANIMATIONS ── */
+.fi { opacity:0; transform:translateY(18px); transition:opacity .65s ease,transform .65s ease; }
+.fi.vis { opacity:1; transform:translateY(0); }
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  nav { padding:1rem 1.5rem; }
+  .nav-links { display:none; }
+  .page-hero, .svcs-wrap, .filter-bar, .process-strip, .cta-section { padding-left:1.5rem; padding-right:1.5rem; }
+  .svc-card, .svc-card:nth-child(even) { grid-template-columns:1fr; }
+  .svc-card-img, .svc-card:nth-child(even) .svc-card-img { order:1; min-height:220px; }
+  .svc-card-body, .svc-card:nth-child(even) .svc-card-body { order:2; padding:2rem; }
+  .svc-card-title { font-size:1.6rem; }
+  .process-grid { grid-template-columns:1fr; }
+  .cta-section { grid-template-columns:1fr; gap:2rem; }
+  .cta-btns { align-items:flex-start; }
+  footer { flex-direction:column; gap:1rem; padding:2rem 1.5rem; }
+  .modal-ov { padding:0; align-items:flex-end; }
+  .modal { max-height:92vh; }
+  .modal-body { padding:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></a>
+  <ul class="nav-links">
+    <li><a href="index.html#value"   class="en">Approach</a>    <a href="index.html#value"   class="ar">المنهجية</a></li>
+    <li><a href="services.html"      class="en active">Services</a><a href="services.html"   class="ar active">الخدمات</a></li>
+    <li><a href="cases.html"         class="en">Case Studies</a><a href="cases.html"         class="ar">دراسات الحالة</a></li>
+    <li><a href="index.html#about"   class="en">About</a>       <a href="index.html#about"   class="ar">عن المستشار</a></li>
+    <li><a href="index.html#contact" class="en">Contact</a>     <a href="index.html#contact" class="ar">تواصل</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="lang-btn" onclick="toggleLang()">عربي</button>
+    <a href="index.html#contact" class="nav-cta en">Book a Call</a>
+    <a href="index.html#contact" class="nav-cta ar">احجز استشارة</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="ph-label"><span class="en">Consulting Services</span><span class="ar">خدمات الاستشارات</span></div>
+    <h1 class="page-title-serif en">Specialized services.<br>Integrated results.</h1>
+    <h1 class="page-title-serif ar">خدمات متخصصة.<br>نتائج متكاملة.</h1>
+    <p class="page-sub-text en">With nearly two decades of experience in the GCC market, each engagement is a deep, structured transformation — not a quick-fix report.</p>
+    <p class="page-sub-text ar">بما يقارب عقدين من الخبرة في سوق الخليج، كل تعاون هو تحول منهجي عميق — لا تقرير مؤقت.</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filter-bar">
+  <span class="filter-lbl en">Filter:</span>
+  <span class="filter-lbl ar">تصفية:</span>
+  <button class="fb act" onclick="filterSvcs('all',this)">
+    <span class="en">All Services</span><span class="ar">جميع الخدمات</span>
+  </button>
+  <!-- Dynamic filter buttons injected by JS -->
+  <div id="filter-btns" style="display:contents"></div>
+</div>
+
+<!-- SERVICES LIST -->
+<div class="svcs-wrap">
+  <div id="svcs-list"></div>
+</div>
+
+<!-- PROCESS STRIP -->
+<div class="process-strip">
+  <div class="fi">
+    <div class="ph-label"><span class="en">How We Work</span><span class="ar">كيف نعمل</span></div>
+    <h2 style="font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:300;color:var(--white);line-height:1.15" class="en">Three tracks. One outcome.</h2>
+    <h2 style="font-family:var(--ar);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;color:var(--white);line-height:1.35" class="ar">ثلاثة مسارات. نتيجة واحدة.</h2>
+  </div>
+  <div class="process-grid fi">
+    <div class="process-step">
+      <div class="ps-num en">01</div>
+      <div class="ps-num ar">٠١</div>
+      <div class="ps-title en">Identity — Branding</div>
+      <div class="ps-title ar">الهوية — العلامة التجارية</div>
+      <p class="ps-text en">We craft an institutional identity that reflects your true strength and attracts high-quality clientele aligned with your ambitions.</p>
+      <p class="ps-text ar">نصمم هوية مؤسسية تعكس قوتك الحقيقية وتجذب عملاء راقيين يتوافقون مع طموحاتك.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num en">02</div>
+      <div class="ps-num ar">٠٢</div>
+      <div class="ps-title en">Systems — Operations</div>
+      <div class="ps-title ar">الأنظمة — العمليات</div>
+      <p class="ps-text en">We develop SOPs and technical integrations that make your business run flawlessly — independent of any single individual.</p>
+      <p class="ps-text ar">نبني إجراءات تشغيلية وتكاملات تقنية تجعل عملك يسير باحترافية — بصرف النظر عن أي فرد.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num en">03</div>
+      <div class="ps-num ar">٠٣</div>
+      <div class="ps-title en">People — Behavior</div>
+      <div class="ps-title ar">الكوادر — السلوك</div>
+      <p class="ps-text en">We invest in your human capital — building teams that adopt a growth and leadership mindset for sustainable performance.</p>
+      <p class="ps-text ar">نستثمر في رأسمالك البشري — بناء فرق تتبنى عقلية النمو والقيادة لأداء مستدام.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section fi">
+  <div>
+    <h2 class="cta-headline en">Ready to transform<br>your organization?</h2>
+    <h2 class="cta-headline ar">مستعد لتحويل<br>مؤسستك؟</h2>
+    <p class="cta-sub en">Don't let operational chaos limit your growth. Let us build the right foundations together.</p>
+    <p class="cta-sub ar">لا تدع الفوضى التشغيلية تحد من نموك. دعنا نبني الأسس الصحيحة معاً.</p>
+  </div>
+  <div class="cta-btns">
+    <a href="index.html#contact" class="btn-primary-lg en">Book a Strategic Call →</a>
+    <a href="index.html#contact" class="btn-primary-lg ar">← احجز مكالمة استراتيجية</a>
+    <a href="cases.html" class="btn-ghost-sm en">View Case Studies →</a>
+    <a href="cases.html" class="btn-ghost-sm ar">← عرض دراسات الحالة</a>
+  </div>
+</div>
+
+<!-- SERVICE DETAIL MODAL -->
+<div class="modal-ov" id="modal-ov" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--g4)" id="modal-hdr-label"></span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-img" id="modal-img-wrap">
+      <div class="modal-img-ph" id="modal-img-ph"><span id="modal-ph-num">01</span></div>
+      <img id="modal-img" src="" alt="" style="display:none">
+    </div>
+    <div class="modal-body">
+      <div class="modal-tag" id="modal-tag"></div>
+      <h2 class="modal-svc-title" id="modal-title"></h2>
+      <div class="modal-svc-sub" id="modal-sub"></div>
+      <p class="modal-svc-desc" id="modal-desc"></p>
+      <div class="modal-items-title en">Key Deliverables</div>
+      <div class="modal-items-title ar">المخرجات الرئيسية</div>
+      <div class="modal-items" id="modal-items"></div>
+      <a href="index.html#contact" class="modal-cta en">Discuss This Service →</a>
+      <a href="index.html#contact" class="modal-cta ar">← ناقش هذه الخدمة</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy en">© 2025 Yaser Ahmed Al-Shkre. All rights reserved.</div>
+  <div class="footer-copy ar">© 2025 ياسر أحمد الشكري. جميع الحقوق محفوظة.</div>
+  <div class="footer-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></div>
+</footer>
+
+<script>
+/* ── Lang helpers ── */
+const L = () => document.documentElement.lang;
+const T = o  => o ? (o[L()] || o.en || '') : '';
+
+/* ── Arrow helper — returns correct arrow per language ── */
+const ARR = () => L() === 'ar' ? '←' : '→';
+
+/* ── Temp images ── */
+const TEMP_SVCS = [
+  'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&q=80&fit=crop',
+  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80&fit=crop',
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&q=80&fit=crop',
+  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80&fit=crop',
+];
+
+/* ── State ── */
+let allSvcs = [], activeFilter = 'all';
+
+/* ── Toggle Lang ── */
+function toggleLang() {
+  const h = document.documentElement, btn = document.getElementById('lang-btn');
+  if (h.lang === 'en') { h.lang = 'ar'; h.dir = 'rtl'; btn.textContent = 'English'; }
+  else                  { h.lang = 'en'; h.dir = 'ltr'; btn.textContent = 'عربي'; }
+  render();
+}
+
+/* ── Init ── */
+function init() {
+  const d = getSiteData();
+  allSvcs = (d.services || []).map((s, i) => ({
+    ...s,
+    image: s.image || TEMP_SVCS[i % TEMP_SVCS.length]
+  }));
+  buildFilters();
+  render();
+}
+
+/* ── Build dynamic filter buttons ── */
+function buildFilters() {
+  // Extract unique tags from all services (use sub-titles as filter labels)
+  const tags = new Set();
+  allSvcs.forEach(s => {
+    if (s.sub?.en) {
+      s.sub.en.split('·').forEach(t => {
+        const clean = t.trim();
+        if (clean) tags.add(clean);
+      });
+    }
+  });
+  // For simplicity, show service titles as filters
+  const btnEl = document.getElementById('filter-btns');
+  btnEl.innerHTML = allSvcs.map((s,i) => `
+    <button class="fb" data-idx="${i}" onclick="filterSvcs(${i}, this)">
+      <span class="en">${s.title?.en || ''}</span>
+      <span class="ar">${s.title?.ar || ''}</span>
+    </button>`).join('');
+}
+
+/* ── Filter ── */
+function filterSvcs(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.fb').forEach(b => b.classList.remove('act'));
+  btn.classList.add('act');
+  render();
+}
+
+function getFiltered() {
+  if (activeFilter === 'all') return allSvcs;
+  const idx = parseInt(activeFilter);
+  return isNaN(idx) ? allSvcs : [allSvcs[idx]].filter(Boolean);
+}
+
+/* ── Render services ── */
+function render() {
+  const svcs = getFiltered();
+  const el   = document.getElementById('svcs-list');
+  if (!svcs.length) { el.innerHTML = `<div style="text-align:center;padding:5rem;color:var(--g4)">${L()==='ar'?'لا توجد خدمات.':'No services found.'}</div>`; return; }
+
+  el.innerHTML = svcs.map((s, i) => {
+    const globalIdx  = allSvcs.indexOf(s);
+    const displayNum = String(globalIdx + 1).padStart(2, '0'); // Always Western numerals
+    const arr        = ARR();
+    const bullets    = (s.items || []).slice(0, 3).map(it => `
+      <div class="svc-bullet">
+        <span class="svc-bullet-dot">◆</span>
+        <span>${T(it)}</span>
+      </div>`).join('');
+
+    return `
+    <div class="svc-card fi" data-id="${s.id}">
+      <div class="svc-card-img">
+        <div class="svc-img-ph"><span>${displayNum}</span></div>
+        <img src="${s.image}" alt="${T(s.title)}" onload="this.previousElementSibling.style.display='none'">
+      </div>
+      <div class="svc-card-body">
+        <div class="svc-card-idx">
+          <span class="svc-num">${displayNum}</span>
+          <span class="en">Consulting Service</span>
+          <span class="ar">خدمة استشارية</span>
+        </div>
+        <h2 class="svc-card-title">${T(s.title)}</h2>
+        <p class="svc-card-sub">${T(s.sub)}</p>
+        <p class="svc-card-desc">${T(s.desc)}</p>
+        ${bullets ? `<div class="svc-bullets">${bullets}</div>` : ''}
+        <button class="svc-cta" onclick="openModal('${s.id}')">
+          <span>${L()==='ar' ? `${arr} التفاصيل الكاملة` : `Full Details ${arr}`}</span>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Re-observe new elements
+  document.querySelectorAll('.fi:not(.vis)').forEach(el => obs.observe(el));
+}
+
+/* ── Modal ── */
+function openModal(id) {
+  const s   = allSvcs.find(x => x.id === id);
+  if (!s) return;
+  const idx        = allSvcs.indexOf(s);
+  const displayNum = String(idx + 1).padStart(2, '0'); // Always Western numerals
+  const arr        = ARR();
+
+  document.getElementById('modal-hdr-label').textContent = L() === 'ar' ? 'خدمة استشارية' : 'Consulting Service';
+  document.getElementById('modal-tag').textContent   = displayNum;
+  document.getElementById('modal-title').textContent = T(s.title);
+  document.getElementById('modal-sub').textContent   = T(s.sub);
+  document.getElementById('modal-desc').textContent  = T(s.desc);
+  document.getElementById('modal-ph-num').textContent = displayNum;
+
+  // Image
+  const img = document.getElementById('modal-img');
+  const ph  = document.getElementById('modal-img-ph');
+  if (s.image) { img.src = s.image; img.style.display = 'block'; ph.style.display = 'none'; }
+  else         { img.style.display = 'none'; ph.style.display = 'flex'; }
+
+  // Items
+  document.getElementById('modal-items').innerHTML = (s.items || []).map(it => `
+    <div class="modal-item">
+      <span class="modal-item-dot">◆</span>
+      <span class="modal-item-text">${T(it)}</span>
+    </div>`).join('');
+
+  // Modal CTA arrow direction
+  document.querySelector('.modal-cta').textContent = L() === 'ar'
+    ? `${arr} ناقش هذه الخدمة`
+    : `Discuss This Service ${arr}`;
+
+  document.getElementById('modal-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-ov').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── Intersection observer ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+/* ── Start ── */
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Yaser Al-Shkre</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="site-data.js"></script>
+<style>
+:root{
+  --bg:#0b0b0b;--s1:#131313;--s2:#1a1a1a;--s3:#212121;
+  --b1:#252525;--b2:#313131;--b3:#404040;
+  --t1:#e8e4df;--t2:#888;--t3:#4a4a4a;
+  --teal:#2dd4bf;--teal2:rgba(45,212,191,.1);--teal3:#0d9488;
+  --red:#ef4444;--red2:rgba(239,68,68,.1);
+  --amber:#f59e0b;--amber2:rgba(245,158,11,.1);
+  --green:#22c55e;
+  --sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:13px;line-height:1.6;overflow-x:hidden}
+input,textarea,select,button{font-family:var(--sans);font-size:13px}
+button{cursor:pointer}a{color:inherit;text-decoration:none}
+
+/* LOGIN */
+#login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
+.lbox{width:380px;background:var(--s1);border:.5px solid var(--b1);padding:2.5rem}
+.lbox-top{display:flex;align-items:center;gap:.8rem;margin-bottom:2rem}
+.lbox-top img{height:24px;opacity:.85}
+.lbox-badge{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--t3);border:.5px solid var(--b1);padding:.18rem .6rem}
+.lh{font-size:1rem;font-weight:400;margin-bottom:.25rem}
+.ls{font-size:.76rem;color:var(--t2);margin-bottom:1.5rem}
+.lf{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.8rem}
+.ll{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--t2)}
+.li{background:var(--bg);border:.5px solid var(--b1);color:var(--t1);padding:.68rem .88rem;outline:none;width:100%;transition:border-color .15s}.li:focus{border-color:var(--teal)}
+.lbtn{width:100%;background:var(--teal);color:#000;border:none;padding:.75rem;font-size:.73rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:background .2s;margin-top:.4rem}.lbtn:hover{background:var(--teal3)}
+.lerr{font-size:.72rem;color:var(--red);margin-top:.45rem;display:none}
+
+/* LAYOUT */
+#app{display:none;min-height:100vh}
+.tb{position:fixed;top:0;left:0;right:0;height:48px;background:var(--s1);border-bottom:.5px solid var(--b1);display:flex;align-items:center;justify-content:space-between;padding:0 1.3rem;z-index:50}
+.tb-l{display:flex;align-items:center;gap:.85rem}
+.tb-logo img{height:20px;opacity:.85}
+.tb-sep{width:.5px;height:14px;background:var(--b2)}
+.tb-name{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--t3)}
+.tb-r{display:flex;align-items:center;gap:.35rem}
+.tb-link{font-size:.68rem;color:var(--t3);padding:.28rem .65rem;border:.5px solid transparent;transition:all .15s}.tb-link:hover{color:var(--teal);border-color:var(--b2)}
+.tb-logout{font-size:.68rem;color:var(--t3);background:none;border:none;padding:.28rem .65rem;transition:color .15s}.tb-logout:hover{color:var(--red)}
+.tb-save{background:var(--teal);color:#000;border:none;font-size:.68rem;font-weight:500;letter-spacing:.08em;padding:.32rem .88rem;transition:background .2s;display:flex;align-items:center;gap:.4rem}.tb-save:hover{background:var(--teal3)}
+.dirty-dot{display:none;width:6px;height:6px;background:var(--amber);border-radius:50%}.dirty-dot.show{display:block}
+
+/* SIDEBAR */
+.sb{position:fixed;top:48px;left:0;width:205px;height:calc(100vh - 48px);background:var(--s1);border-right:.5px solid var(--b1);overflow-y:auto;padding:.8rem 0}
+.sb-sec{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--t3);padding:.85rem 1rem .3rem}
+.sb-item{display:flex;align-items:center;gap:.6rem;padding:.5rem 1rem;font-size:.76rem;color:var(--t2);background:none;border:none;border-left:2px solid transparent;width:100%;text-align:left;transition:all .15s}
+.sb-item:hover{color:var(--t1);background:var(--s2)}.sb-item.act{color:var(--teal);border-left-color:var(--teal);background:var(--teal2)}
+.sb-ic{width:14px;text-align:center;font-size:11px;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--s3);color:var(--t3);font-size:.56rem;padding:.08rem .38rem;border-radius:99px;border:.5px solid var(--b2)}.sb-item.act .sb-badge{background:var(--teal2);color:var(--teal)}
+
+/* MAIN */
+.mc{margin-left:205px;margin-top:48px;padding:1.6rem;min-height:calc(100vh - 48px)}
+.panel{display:none}.panel.act{display:block}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.6rem;gap:1rem}
+.ph-left h1{font-size:1.05rem;font-weight:400;margin-bottom:.12rem}
+.ph-left p{font-size:.73rem;color:var(--t2)}
+.ph-right{display:flex;gap:.45rem;flex-shrink:0}
+
+/* COMPONENTS */
+.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.42rem .88rem;font-size:.7rem;border:none;transition:all .15s;letter-spacing:.04em;white-space:nowrap}
+.btn-teal{background:var(--teal);color:#000;font-weight:500}.btn-teal:hover{background:var(--teal3);color:#fff}
+.btn-outline{background:transparent;border:.5px solid var(--b2);color:var(--t2)}.btn-outline:hover{border-color:var(--b3);color:var(--t1)}
+.btn-danger{background:var(--red2);color:var(--red);border:.5px solid transparent}.btn-danger:hover{background:var(--red);color:#fff}
+.btn-amber{background:var(--amber2);color:var(--amber);border:.5px solid transparent}.btn-amber:hover{background:var(--amber);color:#000}
+.btn-sm{padding:.26rem .62rem;font-size:.66rem}
+.btn-xs{padding:.16rem .46rem;font-size:.62rem}
+
+.card{background:var(--s1);border:.5px solid var(--b1);padding:1.2rem;margin-bottom:.8rem}
+.card:last-child{margin-bottom:0}
+.ct{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;display:flex;align-items:center;gap:.55rem}.ct::after{content:'';flex:1;height:.5px;background:var(--b1)}
+
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--b1);border:.5px solid var(--b1);margin-bottom:1.6rem}
+.stat{background:var(--s1);padding:.9rem 1.1rem}
+.stat-n{font-size:1.55rem;font-weight:300;line-height:1;margin-bottom:.12rem}
+.stat-n span{color:var(--teal)}
+.stat-l{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t2)}
+
+.fg{display:grid;gap:.8rem;margin-bottom:.8rem}.fg-2{grid-template-columns:1fr 1fr}.fg-3{grid-template-columns:1fr 1fr 1fr}.fg-4{grid-template-columns:1fr 1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:.28rem}
+.fl{font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--t2)}
+.fl .lb{font-size:.52rem;padding:.06rem .28rem;border:.5px solid var(--b2);color:var(--t3);margin-left:.3rem;letter-spacing:0;text-transform:none}
+.fl .lb.ar{color:var(--teal);border-color:rgba(45,212,191,.3)}
+.fi,.fs,.fta{background:var(--bg);border:.5px solid var(--b1);color:var(--t1);padding:.52rem .72rem;outline:none;width:100%;transition:border-color .15s}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}
+.fs option{background:var(--s1)}
+.fta{resize:vertical;min-height:72px;line-height:1.65}
+.fta.tall{min-height:108px}.fta.xtall{min-height:135px}
+.fh{font-size:.61rem;color:var(--t3);margin-top:.15rem}
+.bi-wrap{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+
+/* IMAGE UPLOADER — compact */
+.img-up{border:.5px dashed var(--b2);background:var(--bg);position:relative;overflow:hidden;transition:border-color .2s;cursor:pointer}
+.img-up:hover,.img-up.over{border-color:var(--teal)}
+.img-up input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-up-prev{width:100%;display:none;object-fit:cover}
+.img-up-ph{padding:1.5rem;text-align:center;pointer-events:none}
+.iuph-ic{font-size:1.2rem;color:var(--t3);margin-bottom:.35rem}
+.iuph-t{font-size:.72rem;color:var(--t2);margin-bottom:.2rem}
+.iuph-s{font-size:.62rem;color:var(--t3)}
+.img-tools{display:flex;gap:.4rem;padding:.45rem;background:var(--s2);border-top:.5px solid var(--b1)}
+.img-url-in{flex:1;background:var(--bg);border:.5px solid var(--b1);color:var(--t1);padding:.35rem .55rem;font-family:var(--mono);font-size:.66rem;outline:none}.img-url-in:focus{border-color:var(--teal)}
+
+/* Section image card — full width with preview */
+.sec-img-card{display:grid;grid-template-columns:200px 1fr;gap:1rem;align-items:start;padding:1rem;background:var(--s2);border:.5px solid var(--b1);margin-bottom:.6rem}
+.sec-img-thumb{width:200px;height:130px;object-fit:cover;background:var(--s3);border:.5px solid var(--b1);flex-shrink:0}
+.sec-img-thumb-ph{width:200px;height:130px;background:var(--s3);border:.5px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:.68rem;color:var(--t3)}
+.sec-img-info{flex:1}
+.sec-img-name{font-size:.8rem;font-weight:500;margin-bottom:.25rem}
+.sec-img-sub{font-size:.7rem;color:var(--t2);margin-bottom:.7rem}
+.sec-img-acts{display:flex;gap:.5rem;flex-wrap:wrap}
+
+/* Sortable */
+.sort-item{display:flex;align-items:flex-start;gap:.65rem;padding:.75rem;background:var(--s2);border:.5px solid var(--b1);margin-bottom:.4px;transition:background .15s}.sort-item:hover{background:var(--s3)}
+.sort-h{color:var(--t3);font-size:.85rem;cursor:grab;padding-top:.1rem;user-select:none;flex-shrink:0;line-height:1.4}
+.sort-body{flex:1;min-width:0}
+.sort-title{font-size:.8rem;color:var(--t1);margin-bottom:.12rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sort-sub{font-size:.7rem;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sort-acts{display:flex;gap:.3rem;flex-shrink:0;margin-top:.08rem}
+
+/* Table */
+.tbl{width:100%;border:.5px solid var(--b1);border-collapse:collapse}
+.tbl th{background:var(--s2);padding:.58rem .88rem;text-align:left;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);font-weight:400;border-bottom:.5px solid var(--b1)}
+.tbl td{padding:.68rem .88rem;border-bottom:.5px solid var(--b1);vertical-align:middle;font-size:.76rem}
+.tbl tr:last-child td{border-bottom:none}.tbl tr:hover td{background:var(--s2)}
+.tbl-img{width:48px;height:33px;object-fit:cover;border:.5px solid var(--b1)}
+.tbl-ph{width:48px;height:33px;background:var(--s2);border:.5px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--t3)}
+.chip{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;padding:.13rem .48rem;border:.5px solid;white-space:nowrap}
+.chip-teal{color:var(--teal);border-color:rgba(45,212,191,.4);background:var(--teal2)}
+.chip-gray{color:var(--t3);border-color:var(--b2);background:var(--s2)}
+.td-acts{display:flex;gap:.32rem;flex-wrap:wrap}
+.col-t{max-width:230px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Tags */
+.tags-box{display:flex;flex-wrap:wrap;gap:.32rem;padding:.32rem;background:var(--bg);border:.5px solid var(--b1);min-height:32px;cursor:text;transition:border-color .15s}.tags-box:focus-within{border-color:var(--teal)}
+.tag-chip{background:var(--s2);color:var(--t2);font-size:.62rem;padding:.1rem .42rem;display:flex;align-items:center;gap:.22rem;border:.5px solid var(--b2)}
+.tag-chip button{background:none;border:none;color:var(--t3);font-size:.68rem;padding:0;line-height:1;cursor:pointer}.tag-chip button:hover{color:var(--red)}
+.tag-bare{flex:1;background:transparent;border:none;color:var(--t1);font-family:var(--sans);font-size:.73rem;outline:none;min-width:68px;padding:.04rem .12rem}
+
+/* Metrics row */
+.met-row{display:grid;grid-template-columns:95px 1fr 1fr auto;gap:.45rem;align-items:end;margin-bottom:.45rem}
+
+/* Drawer */
+.dr-ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:150;opacity:0;pointer-events:none;transition:opacity .25s}.dr-ov.open{opacity:1;pointer-events:all}
+.dr{position:fixed;top:0;right:0;bottom:0;width:700px;background:var(--s1);border-left:.5px solid var(--b2);z-index:151;transform:translateX(100%);transition:transform .28s ease;overflow-y:auto;display:flex;flex-direction:column}.dr.open{transform:translateX(0)}
+.dr-hdr{position:sticky;top:0;background:var(--s1);border-bottom:.5px solid var(--b1);padding:.9rem 1.3rem;display:flex;align-items:center;justify-content:space-between;z-index:5;flex-shrink:0}
+.dr-title{font-size:.82rem;font-weight:400}
+.dr-acts{display:flex;gap:.45rem}
+.dr-close{background:none;border:.5px solid var(--b1);color:var(--t2);width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .15s}.dr-close:hover{border-color:var(--red);color:var(--red)}
+.dr-body{padding:1.3rem;flex:1;overflow-y:auto}
+
+/* Confirm */
+.conf-ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}.conf-ov.open{opacity:1;pointer-events:all}
+.conf-box{background:var(--s2);border:.5px solid var(--b2);padding:1.3rem;max-width:350px;width:90%}
+.conf-t{font-size:.85rem;margin-bottom:.32rem}.conf-s{font-size:.73rem;color:var(--t2);margin-bottom:1rem;line-height:1.6}
+.conf-acts{display:flex;gap:.45rem;justify-content:flex-end}
+
+/* Toast */
+.tw{position:fixed;bottom:1.2rem;right:1.2rem;z-index:300;display:flex;flex-direction:column;gap:.38rem}
+.toast{background:var(--s2);border:.5px solid var(--b2);color:var(--t1);padding:.58rem 1rem;font-size:.73rem;display:flex;align-items:center;gap:.5rem;animation:ti .2s ease;min-width:200px}
+.toast.ok{border-left:2.5px solid var(--teal)}.toast.err{border-left:2.5px solid var(--red)}.toast.warn{border-left:2.5px solid var(--amber)}
+@keyframes ti{from{transform:translateX(14px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* Testimonial */
+.testi-card{background:var(--s2);border:.5px solid var(--b1);padding:.9rem;margin-bottom:.4px;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+.tn{font-size:.8rem;font-weight:500;margin-bottom:.1rem}.tr{font-size:.66rem;color:var(--teal);margin-bottom:.35rem}.tt{font-size:.73rem;color:var(--t2);line-height:1.65;font-style:italic}
+
+/* Inbox */
+.msg-item{padding:.9rem;background:var(--s2);border:.5px solid var(--b1);margin-bottom:.4px;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+.msg-item.unread{border-left:2.5px solid var(--teal)}.mn{font-size:.8rem;font-weight:500;margin-bottom:.08rem}.mc2{font-size:.66rem;color:var(--teal);margin-bottom:.2rem}.mp{font-size:.73rem;color:var(--t2);max-width:480px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mm{font-size:.63rem;color:var(--t3);text-align:right}
+
+/* Image preview card for sections */
+.img-preview-section{position:relative;background:var(--s2);border:.5px solid var(--b1);overflow:hidden;margin-bottom:.8rem}
+.img-preview-section img{width:100%;height:180px;object-fit:cover;display:none}
+.img-preview-section .iph{height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--t3);gap:.4rem}
+.img-preview-section .iph-ic{font-size:1.8rem}
+.img-preview-section .iph-txt{font-size:.7rem}
+.img-section-tools{display:flex;gap:.5rem;padding:.6rem;background:var(--s1);border-top:.5px solid var(--b1);align-items:center}
+.img-section-label{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);flex-shrink:0}
+
+.empty{text-align:center;padding:3rem 2rem;color:var(--t2)}
+.empty-ic{font-size:1.7rem;color:var(--t3);margin-bottom:.7rem}.empty-t{font-size:.83rem;color:var(--t1);margin-bottom:.28rem}.empty-s{font-size:.7rem}
+
+.json-box{font-family:var(--mono);font-size:.66rem;color:var(--t2);line-height:1.6;background:var(--bg);border:.5px solid var(--b1);padding:.9rem;max-height:360px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+
+@media(max-width:900px){.sb{display:none}.mc{margin-left:0}.dr{width:100%}.fg-2,.fg-3,.fg-4{grid-template-columns:1fr}.bi-wrap{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lbox">
+    <div class="lbox-top">
+      <img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'">
+      <span class="lbox-badge">Admin Panel</span>
+    </div>
+    <h2 class="lh">Welcome back</h2>
+    <p class="ls">Enter your password to manage the website.</p>
+    <div class="lf"><label class="ll">Password</label>
+      <input type="password" id="lp" class="li" placeholder="••••••••" onkeydown="if(event.key==='Enter')auth()">
+    </div>
+    <button class="lbtn" onclick="auth()">Access Dashboard →</button>
+    <div class="lerr" id="lerr">Incorrect password.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<div class="tb">
+  <div class="tb-l">
+    <div class="tb-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></div>
+    <div class="tb-sep"></div>
+    <span class="tb-name">Site Manager</span>
+  </div>
+  <div class="tb-r">
+    <button class="tb-save" onclick="saveAll()" id="save-btn">
+      ✓ Save <div class="dirty-dot" id="dirty-dot"></div>
+    </button>
+    <button class="tb-save" onclick="saveAndDownload()" style="background:var(--amber);color:#000;margin-left:.3rem" title="Save all changes then download updated site-data.js">
+      ↓ Publish
+    </button>
+    <a href="index.html" target="_blank" class="tb-link">↗ Home</a>
+    <a href="cases.html" target="_blank" class="tb-link">↗ Cases</a>
+    <button class="tb-logout" onclick="logout()">Log out</button>
+  </div>
+</div>
+
+<div class="sb">
+  <button class="sb-item" onclick="nav('typography',this)"><span class="sb-ic">Aa</span> Typography</button>
+  <div class="sb-sec">Pages</div>
+  <button class="sb-item act" onclick="nav('dash',this)"><span class="sb-ic">◈</span> Dashboard</button>
+  <button class="sb-item" onclick="nav('hero',this)"><span class="sb-ic">⌂</span> Home / Hero</button>
+  <button class="sb-item" onclick="nav('images',this)"><span class="sb-ic">◻</span> All Images</button>
+  <button class="sb-item" onclick="nav('services',this)"><span class="sb-ic">▦</span> Services <span class="sb-badge" id="b-svcs">0</span></button>
+  <button class="sb-item" onclick="nav('cases',this)"><span class="sb-ic">◉</span> Cases <span class="sb-badge" id="b-cases">0</span></button>
+  <button class="sb-item" onclick="nav('achievements',this)"><span class="sb-ic">🏆</span> Achievements <span class="sb-badge" id="b-achs">0</span></button>
+  <button class="sb-item" onclick="nav('whatsapp',this)"><span class="sb-ic">💬</span> WhatsApp Widget</button>
+  <button class="sb-item" onclick="nav('about',this)"><span class="sb-ic">◎</span> About</button>
+  <button class="sb-item" onclick="nav('contact',this)"><span class="sb-ic">✉</span> Contact</button>
+  <button class="sb-item" onclick="nav('inbox',this)"><span class="sb-ic">📥</span> Inbox <span class="sb-badge" id="b-inbox">0</span></button>
+  <div class="sb-sec">System</div>
+  <button class="sb-item" onclick="nav('settings',this)"><span class="sb-ic">⚙</span> Settings</button>
+  <button class="sb-item" onclick="nav('export',this)"><span class="sb-ic">↓</span> Export</button>
+</div>
+
+<div class="mc">
+
+<!-- TYPOGRAPHY -->
+<div class="panel" id="panel-typography">
+  <div class="ph">
+    <div class="ph-left"><h1>Typography</h1><p>Control all fonts, sizes, weights and colors across every page.</p></div>
+    <div class="ph-right">
+      <button class="btn btn-outline btn-sm" onclick="resetTypo()">↺ Reset Defaults</button>
+      <button class="btn btn-teal btn-sm" onclick="saveAll()">Save & Apply →</button>
+    </div>
+  </div>
+
+  <!-- LIVE PREVIEW -->
+  <div class="card" style="margin-bottom:1rem">
+    <div class="ct">Live Preview</div>
+    <div id="typo-preview" style="padding:2rem;background:var(--bg);border:.5px solid var(--b1)">
+      <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem">SECTION LABEL</div>
+      <div id="tp-h1" style="margin-bottom:.5rem;line-height:1.15">Main Headline / العنوان الرئيسي</div>
+      <div id="tp-h2" style="margin-bottom:.8rem;line-height:1.2">Section Title / عنوان القسم</div>
+      <div id="tp-body" style="margin-bottom:.8rem;max-width:500px;line-height:1.75">Body text: With nearly two decades of experience, we build living ecosystems that transform ambitious firms. / نص المحتوى: بما يقارب عقدين من الخبرة، نبني أنظمة حية تحوّل الشركات الطموحة.</div>
+      <div id="tp-nav" style="letter-spacing:.1em;text-transform:uppercase;color:var(--g4)">NAVIGATION LINK</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+
+    <!-- ENGLISH FONTS -->
+    <div>
+      <div class="card"><div class="ct">English — Heading Font</div>
+        <div class="field"><label class="fl">Heading Font</label>
+          <select class="fs" id="en-heading-font" onchange="updTypoPrev();dirty()">
+            <optgroup label="Serif (recommended for headings)">
+              <option>Cormorant Garamond</option>
+              <option>Playfair Display</option>
+              <option>Libre Baskerville</option>
+              <option>EB Garamond</option>
+              <option>DM Serif Display</option>
+              <option>Lora</option>
+            </optgroup>
+            <optgroup label="Sans-serif">
+              <option>DM Sans</option>
+              <option>Inter</option>
+              <option>Outfit</option>
+              <option>Jost</option>
+              <option>Raleway</option>
+              <option>Poppins</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="fg fg-2" style="margin-top:.6rem">
+          <div class="field"><label class="fl">Hero Size</label><input class="fi" id="en-heading-size" placeholder="clamp(2.6rem,4.6vw,4.4rem)" oninput="updTypoPrev();dirty()"></div>
+          <div class="field"><label class="fl">Section Size</label><input class="fi" id="en-section-size" placeholder="clamp(1.9rem,3.2vw,2.8rem)" oninput="updTypoPrev();dirty()"></div>
+        </div>
+        <div class="field" style="margin-top:.6rem"><label class="fl">Heading Weight</label>
+          <select class="fs" id="en-heading-weight" onchange="updTypoPrev();dirty()">
+            <option value="300">300 — Light</option>
+            <option value="400">400 — Regular</option>
+            <option value="500">500 — Medium</option>
+            <option value="600">600 — SemiBold</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:.8rem"><div class="ct">English — Body Font</div>
+        <div class="field"><label class="fl">Body Font</label>
+          <select class="fs" id="en-body-font" onchange="updTypoPrev();dirty()">
+            <optgroup label="Sans-serif (recommended for body)">
+              <option>DM Sans</option>
+              <option>Inter</option>
+              <option>Outfit</option>
+              <option>Jost</option>
+              <option>Raleway</option>
+              <option>Poppins</option>
+            </optgroup>
+            <optgroup label="Serif">
+              <option>Cormorant Garamond</option>
+              <option>Playfair Display</option>
+              <option>Lora</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="fg fg-2" style="margin-top:.6rem">
+          <div class="field"><label class="fl">Body Size</label><input class="fi" id="en-body-size" placeholder="0.92rem" oninput="updTypoPrev();dirty()"></div>
+          <div class="field"><label class="fl">Nav Size</label><input class="fi" id="en-nav-size" placeholder="0.76rem" oninput="updTypoPrev();dirty()"></div>
+        </div>
+        <div class="fg fg-2" style="margin-top:.6rem">
+          <div class="field"><label class="fl">Body Weight</label>
+            <select class="fs" id="en-body-weight" onchange="updTypoPrev();dirty()">
+              <option value="300">300 — Light</option>
+              <option value="400">400 — Regular</option>
+              <option value="500">500 — Medium</option>
+            </select>
+          </div>
+          <div class="field"><label class="fl">Line Height</label><input class="fi" id="en-line-height" placeholder="1.7" oninput="updTypoPrev();dirty()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARABIC FONTS -->
+    <div>
+      <div class="card"><div class="ct">Arabic — Heading Font</div>
+        <div class="field"><label class="fl">Heading Font</label>
+          <select class="fs" id="ar-heading-font" onchange="updTypoPrev();dirty()">
+            <option>Tajawal</option>
+            <option>Cairo</option>
+            <option>Almarai</option>
+            <option>Noto Kufi Arabic</option>
+            <option>IBM Plex Sans Arabic</option>
+          </select>
+        </div>
+        <div class="fg fg-2" style="margin-top:.6rem">
+          <div class="field"><label class="fl">Hero Size</label><input class="fi" id="ar-heading-size" placeholder="clamp(2rem,4vw,3.6rem)" oninput="updTypoPrev();dirty()"></div>
+          <div class="field"><label class="fl">Section Size</label><input class="fi" id="ar-section-size" placeholder="clamp(1.7rem,2.8vw,2.4rem)" oninput="updTypoPrev();dirty()"></div>
+        </div>
+        <div class="field" style="margin-top:.6rem"><label class="fl">Heading Weight</label>
+          <select class="fs" id="ar-heading-weight" onchange="updTypoPrev();dirty()">
+            <option value="300">300 — خفيف</option>
+            <option value="400">400 — عادي</option>
+            <option value="500">500 — متوسط</option>
+            <option value="700">700 — عريض</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:.8rem"><div class="ct">Arabic — Body Font</div>
+        <div class="field"><label class="fl">Body Font</label>
+          <select class="fs" id="ar-body-font" onchange="updTypoPrev();dirty()">
+            <option>Tajawal</option>
+            <option>Cairo</option>
+            <option>Almarai</option>
+            <option>Noto Kufi Arabic</option>
+            <option>IBM Plex Sans Arabic</option>
+          </select>
+        </div>
+        <div class="fg fg-2" style="margin-top:.6rem">
+          <div class="field"><label class="fl">Body Size</label><input class="fi" id="ar-body-size" placeholder="0.95rem" oninput="updTypoPrev();dirty()"></div>
+          <div class="field"><label class="fl">Nav Size</label><input class="fi" id="ar-nav-size" placeholder="0.8rem" oninput="updTypoPrev();dirty()"></div>
+        </div>
+        <div class="fg fg-2" style="margin-top:.6rem">
+          <div class="field"><label class="fl">Body Weight</label>
+            <select class="fs" id="ar-body-weight" onchange="updTypoPrev();dirty()">
+              <option value="300">300 — خفيف</option>
+              <option value="400">400 — عادي</option>
+              <option value="500">500 — متوسط</option>
+            </select>
+          </div>
+          <div class="field"><label class="fl">Line Height</label><input class="fi" id="ar-line-height" placeholder="1.85" oninput="updTypoPrev();dirty()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLORS -->
+  <div class="card" style="margin-top:.8rem"><div class="ct">Colors</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem">
+      <div class="field">
+        <label class="fl">Accent / Teal</label>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input type="color" id="col-teal" value="#2dd4bf" oninput="updTypoPrev();dirty()" style="width:40px;height:32px;border:.5px solid var(--b2);background:none;cursor:pointer;padding:2px">
+          <input class="fi" id="col-teal-hex" value="#2dd4bf" style="font-family:var(--mono);font-size:.72rem" oninput="syncColor('teal')">
+        </div>
+        <div class="fh">Links, buttons, highlights</div>
+      </div>
+      <div class="field">
+        <label class="fl">Heading Color</label>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input type="color" id="col-heading" value="#f5f3ef" oninput="updTypoPrev();dirty()" style="width:40px;height:32px;border:.5px solid var(--b2);background:none;cursor:pointer;padding:2px">
+          <input class="fi" id="col-heading-hex" value="#f5f3ef" style="font-family:var(--mono);font-size:.72rem" oninput="syncColor('heading')">
+        </div>
+        <div class="fh">H1, H2, H3 color</div>
+      </div>
+      <div class="field">
+        <label class="fl">Body Text Color</label>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input type="color" id="col-body" value="#666666" oninput="updTypoPrev();dirty()" style="width:40px;height:32px;border:.5px solid var(--b2);background:none;cursor:pointer;padding:2px">
+          <input class="fi" id="col-body-hex" value="#666666" style="font-family:var(--mono);font-size:.72rem" oninput="syncColor('body')">
+        </div>
+        <div class="fh">Paragraphs, descriptions</div>
+      </div>
+      <div class="field">
+        <label class="fl">Background</label>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input type="color" id="col-black" value="#0a0a0a" oninput="updTypoPrev();dirty()" style="width:40px;height:32px;border:.5px solid var(--b2);background:none;cursor:pointer;padding:2px">
+          <input class="fi" id="col-black-hex" value="#0a0a0a" style="font-family:var(--mono);font-size:.72rem" oninput="syncColor('black')">
+        </div>
+        <div class="fh">Page background</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK PRESETS -->
+  <div class="card" style="margin-top:.8rem"><div class="ct">Quick Presets</div>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="applyPreset('elegant')">✦ Elegant Serif</button>
+      <button class="btn btn-outline btn-sm" onclick="applyPreset('modern')">◻ Modern Sans</button>
+      <button class="btn btn-outline btn-sm" onclick="applyPreset('bold')">▪ Bold & Strong</button>
+      <button class="btn btn-outline btn-sm" onclick="applyPreset('minimal')">○ Minimal Clean</button>
+      <button class="btn btn-outline btn-sm" onclick="applyPreset('luxury')">◈ Luxury Dark</button>
+    </div>
+    <div style="font-size:.68rem;color:var(--t3);margin-top:.6rem">Presets change fonts, weights and sizes. Colors remain unchanged.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="panel act" id="panel-dash">
+  <div class="ph"><div class="ph-left"><h1>Dashboard</h1><p>Website overview.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="nav('cases',document.querySelectorAll('.sb-item')[4]);openCaseDr()">+ New Case</button></div>
+  </div>
+  <div class="stats" id="dash-stats"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem">
+    <div class="card"><div class="ct">Quick Edit — Hero</div>
+      <div class="field"><label class="fl">Headline <span class="lb">EN</span></label><input class="fi" id="qh-en" oninput="dirty()"></div>
+      <div class="field" style="margin-top:.55rem"><label class="fl">Headline <span class="lb ar">AR</span></label><input class="fi" id="qh-ar" dir="auto" oninput="dirty()"></div>
+    </div>
+    <div class="card"><div class="ct">Quick Edit — Contact</div>
+      <div class="field"><label class="fl">WhatsApp</label><input class="fi" id="qwa" oninput="dirty()"></div>
+      <div class="field" style="margin-top:.55rem"><label class="fl">Email</label><input class="fi" id="qem" oninput="dirty()"></div>
+    </div>
+  </div>
+  <div class="card"><div class="ct">Recent Cases</div>
+    <table class="tbl"><thead><tr><th>Cover</th><th>Title</th><th>Industry</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody id="dash-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- HOME / HERO -->
+<div class="panel" id="panel-hero">
+  <div class="ph"><div class="ph-left"><h1>Home Page</h1><p>Edit hero, stats and approach cards.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="saveAll()">Save Changes</button></div>
+  </div>
+  <div class="card"><div class="ct">Hero Image</div>
+    <div class="img-preview-section" id="hero-img-section">
+      <img id="hero-img-prev" src="" alt="" style="height:220px">
+      <div class="iph" id="hero-img-ph"><div class="iph-ic">⌂</div><div class="iph-txt">No hero image</div></div>
+    </div>
+    <div class="img-section-tools">
+      <span class="img-section-label">Hero Background</span>
+      <input type="file" accept="image/*" onchange="uploadImg(event,'hero_img')" style="font-size:.68rem;color:var(--t2)">
+      <input type="text" class="img-url-in" id="hero-img-url" placeholder="…or paste image URL" style="flex:1" oninput="handleUrlImg('hero_img',this.value)">
+      <button class="btn btn-danger btn-xs" onclick="clearSectionImg('hero_img')">✕ Remove</button>
+    </div>
+    <input type="hidden" id="hero_img">
+  </div>
+  <div class="card"><div class="ct">Hero Text</div>
+    <div class="bi-wrap">
+      <div class="field"><label class="fl">Headline <span class="lb">EN</span></label><textarea class="fta" id="h-hl-en" oninput="dirty()"></textarea></div>
+      <div class="field"><label class="fl">Headline <span class="lb ar">AR</span></label><textarea class="fta" id="h-hl-ar" dir="auto" oninput="dirty()"></textarea></div>
+    </div>
+    <div class="bi-wrap" style="margin-top:.7rem">
+      <div class="field"><label class="fl">Sub-headline <span class="lb">EN</span></label><textarea class="fta tall" id="h-sub-en" oninput="dirty()"></textarea></div>
+      <div class="field"><label class="fl">Sub-headline <span class="lb ar">AR</span></label><textarea class="fta tall" id="h-sub-ar" dir="auto" oninput="dirty()"></textarea></div>
+    </div>
+    <div class="fg fg-2" style="margin-top:.7rem">
+      <div class="field"><label class="fl">CTA Button <span class="lb">EN</span></label><input class="fi" id="h-cta-en" oninput="dirty()"></div>
+      <div class="field"><label class="fl">CTA Button <span class="lb ar">AR</span></label><input class="fi" id="h-cta-ar" dir="auto" oninput="dirty()"></div>
+    </div>
+  </div>
+  <div class="card"><div class="ct">Hero Stats</div>
+    <div id="hero-stats-list"></div>
+    <button class="btn btn-outline btn-sm" onclick="addHeroStat()" style="margin-top:.5rem">+ Add Stat</button>
+  </div>
+  <div class="card"><div class="ct">Approach Cards (Value Propositions)</div>
+    <div id="val-cards-list"></div>
+    <button class="btn btn-outline btn-sm" onclick="addValCard()" style="margin-top:.5rem">+ Add Card</button>
+  </div>
+</div>
+
+<!-- ALL IMAGES -->
+<div class="panel" id="panel-images">
+  <div class="ph"><div class="ph-left"><h1>All Images</h1><p>Manage images across all sections from one place.</p></div></div>
+  <div id="all-images-panel"></div>
+</div>
+
+<!-- SERVICES -->
+<div class="panel" id="panel-services">
+  <div class="ph"><div class="ph-left"><h1>Services</h1><p>Manage the consulting services listed on the website.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="openSvcDr()">+ New Service</button></div>
+  </div>
+  <div class="card"><div class="ct">Services List</div><div id="svcs-list"></div></div>
+</div>
+
+<!-- ACHIEVEMENTS -->
+<div class="panel" id="panel-achievements">
+  <div class="ph">
+    <div class="ph-left"><h1>Achievements</h1><p>Numbers and milestones shown on the homepage.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="addAch()">+ Add Achievement</button></div>
+  </div>
+  <div class="card">
+    <div class="ct">Achievements List <span style="color:var(--t3);font-size:.58rem;letter-spacing:0;text-transform:none">— drag to reorder</span></div>
+    <div id="ach-list"></div>
+    <button class="btn btn-outline btn-sm" onclick="addAch()" style="margin-top:.6rem">+ Add Achievement</button>
+  </div>
+  <div style="display:flex;justify-content:flex-end;margin-top:.8rem">
+    <button class="btn btn-teal" onclick="saveAll()">Save Achievements →</button>
+  </div>
+</div>
+
+<!-- WHATSAPP WIDGET -->
+<div class="panel" id="panel-whatsapp">
+  <div class="ph">
+    <div class="ph-left"><h1>WhatsApp Widget</h1><p>Floating chat button shown on the homepage.</p></div>
+    <div class="ph-right">
+      <button class="btn btn-outline btn-sm" onclick="toggleWAEnabled()">Toggle On/Off</button>
+      <button class="btn btn-teal btn-sm" onclick="saveAll()">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div id="wa-status-bar" style="padding:.75rem 1rem;margin-bottom:.8rem;font-size:.78rem;display:flex;align-items:center;gap:.6rem;border:.5px solid"></div>
+
+  <!-- Live preview -->
+  <div class="card" style="margin-bottom:1rem">
+    <div class="ct">Live Preview</div>
+    <div style="background:var(--bg);border:.5px solid var(--b1);padding:2rem;position:relative;min-height:120px;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
+      <div id="wa-prev-tooltip" style="background:#fff;color:#000;font-size:.75rem;padding:.5rem .9rem;border-radius:2px;box-shadow:0 2px 12px rgba(0,0,0,.3);max-width:200px;line-height:1.5"></div>
+      <div id="wa-prev-btn" style="display:flex;align-items:center;gap:.55rem;color:white;padding:.7rem 1.2rem .7rem .9rem;border-radius:50px;font-size:.78rem;font-weight:500;box-shadow:0 4px 16px rgba(37,211,102,.4)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span id="wa-prev-label">Chat with us</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+    <div>
+      <div class="card"><div class="ct">Widget Settings</div>
+        <div class="field">
+          <label class="fl">Enable Widget</label>
+          <div style="display:flex;align-items:center;gap:.8rem;margin-top:.2rem">
+            <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer">
+              <input type="checkbox" id="wa-enabled" onchange="updWAPrev();dirty()" style="width:14px;height:14px;accent-color:var(--teal)">
+              <span style="font-size:.78rem;color:var(--t2)">Show WhatsApp widget on website</span>
+            </label>
+          </div>
+        </div>
+        <div class="field" style="margin-top:.7rem">
+          <label class="fl">WhatsApp Number <span style="color:var(--t3);text-transform:none;letter-spacing:0">(with country code, numbers only)</span></label>
+          <input class="fi" id="wa-number" placeholder="966501234567" oninput="updWAPrev();dirty()">
+          <div class="fh">Example: 966501234567 (Saudi +966)</div>
+        </div>
+        <div class="field" style="margin-top:.7rem">
+          <label class="fl">Button Color</label>
+          <div style="display:flex;gap:.6rem;align-items:center;margin-top:.3rem;flex-wrap:wrap">
+            <input type="color" id="wa-color" value="#25D366" oninput="updWAPrev();dirty()" style="width:36px;height:30px;border:.5px solid var(--b2);background:none;cursor:pointer;padding:2px">
+            <span style="font-size:.72rem;color:var(--t2)">Default: WhatsApp Green</span>
+            <button class="btn btn-outline btn-xs" onclick="document.getElementById('wa-color').value='#25D366';updWAPrev();dirty()">Reset to Green</button>
+          </div>
+        </div>
+        <div class="field" style="margin-top:.7rem">
+          <label class="fl">Position on Screen</label>
+          <select class="fs" id="wa-pos" onchange="dirty()">
+            <option value="bottom-right">Bottom Right</option>
+            <option value="bottom-left">Bottom Left</option>
+          </select>
+        </div>
+        <div class="field" style="margin-top:.7rem">
+          <label class="fl">Show After (seconds)</label>
+          <input class="fi" id="wa-delay" type="number" min="0" max="30" placeholder="3" oninput="dirty()" style="width:100px">
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card"><div class="ct">Button Text</div>
+        <div class="field"><label class="fl">Button Label <span class="lb">EN</span></label><input class="fi" id="wa-label-en" placeholder="Chat with us" oninput="updWAPrev();dirty()"></div>
+        <div class="field" style="margin-top:.6rem"><label class="fl">Button Label <span class="lb ar">AR</span></label><input class="fi" id="wa-label-ar" placeholder="تواصل معنا" dir="auto" oninput="dirty()"></div>
+      </div>
+      <div class="card" style="margin-top:.8rem"><div class="ct">Tooltip Text</div>
+        <div class="field"><label class="fl">Tooltip <span class="lb">EN</span></label><input class="fi" id="wa-tip-en" placeholder="Typically replies within 1 hour" oninput="updWAPrev();dirty()"></div>
+        <div class="field" style="margin-top:.6rem"><label class="fl">Tooltip <span class="lb ar">AR</span></label><input class="fi" id="wa-tip-ar" placeholder="يرد عادةً خلال ساعة" dir="auto" oninput="dirty()"></div>
+      </div>
+      <div class="card" style="margin-top:.8rem"><div class="ct">Pre-filled Message</div>
+        <div class="field"><label class="fl">Opens WhatsApp with this message <span class="lb">EN</span></label><textarea class="fta" id="wa-msg-en" placeholder="Hello! I'd like to discuss a consulting opportunity." oninput="dirty()"></textarea></div>
+        <div class="field" style="margin-top:.6rem"><label class="fl"><span class="lb ar">AR</span></label><textarea class="fta" id="wa-msg-ar" dir="auto" placeholder="مرحباً! أود مناقشة فرصة استشارية." oninput="dirty()"></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CASES -->
+<div class="panel" id="panel-cases">
+  <div class="ph"><div class="ph-left"><h1>Case Studies</h1><p>Add, edit, delete and feature cases.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="openCaseDr()">+ New Case</button></div>
+  </div>
+  <div class="card"><div class="ct">All Cases</div>
+    <table class="tbl"><thead><tr><th style="width:58px">Cover</th><th>Title</th><th>Industry</th><th>Date</th><th>Status</th><th style="width:190px">Actions</th></tr></thead>
+    <tbody id="cases-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="panel" id="panel-about">
+  <div class="ph"><div class="ph-left"><h1>About</h1><p>Edit profile, photo, qualifications and testimonials.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="saveAll()">Save Changes</button></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 250px;gap:.8rem;align-items:start">
+    <div>
+      <div class="card"><div class="ct">Profile</div>
+        <div class="fg fg-2"><div class="field"><label class="fl">Name <span class="lb">EN</span></label><input class="fi" id="ab-name-en" oninput="dirty()"></div><div class="field"><label class="fl">Name <span class="lb ar">AR</span></label><input class="fi" id="ab-name-ar" dir="auto" oninput="dirty()"></div></div>
+        <div class="fg fg-2" style="margin-top:.65rem"><div class="field"><label class="fl">Role <span class="lb">EN</span></label><input class="fi" id="ab-role-en" oninput="dirty()"></div><div class="field"><label class="fl">Role <span class="lb ar">AR</span></label><input class="fi" id="ab-role-ar" dir="auto" oninput="dirty()"></div></div>
+        <div class="bi-wrap" style="margin-top:.65rem"><div class="field"><label class="fl">Bio <span class="lb">EN</span></label><textarea class="fta xtall" id="ab-bio-en" oninput="dirty()"></textarea></div><div class="field"><label class="fl">Bio <span class="lb ar">AR</span></label><textarea class="fta xtall" id="ab-bio-ar" dir="auto" oninput="dirty()"></textarea></div></div>
+      </div>
+      <div class="card"><div class="ct">Three Core Pillars</div><div id="pillars-list"></div></div>
+      <div class="card"><div class="ct">Qualifications</div><div id="quals-list"></div><button class="btn btn-outline btn-sm" onclick="addQual()" style="margin-top:.5rem">+ Add</button></div>
+      <div class="card"><div class="ct">Client Testimonials</div><div id="testis-list"></div><button class="btn btn-outline btn-sm" onclick="openTestiDr()" style="margin-top:.5rem">+ Add Testimonial</button></div>
+    </div>
+    <div>
+      <div class="card"><div class="ct">Profile Photo</div>
+        <div class="img-preview-section" id="photo-section">
+          <img id="ab-photo-prev" src="" alt="" style="height:260px;aspect-ratio:3/4;object-fit:cover">
+          <div class="iph" id="ab-photo-ph" style="height:260px"><div class="iph-ic">◎</div><div class="iph-txt">Upload photo</div></div>
+        </div>
+        <div class="img-section-tools" style="flex-direction:column;align-items:stretch;gap:.4rem">
+          <input type="file" accept="image/*" onchange="uploadImg(event,'ab_photo')" style="font-size:.68rem;color:var(--t2)">
+          <input type="text" class="img-url-in" id="ab-photo-url" placeholder="…or paste image URL" oninput="handleUrlImg('ab_photo',this.value)">
+          <button class="btn btn-danger btn-xs" onclick="clearSectionImg('ab_photo')" style="align-self:flex-start">✕ Remove Photo</button>
+        </div>
+        <input type="hidden" id="ab_photo">
+      </div>
+      <div class="card"><div class="ct">Experience</div>
+        <div class="field"><label class="fl">Years Badge</label><input class="fi" id="ab-years" placeholder="20" oninput="dirty()"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="panel" id="panel-contact">
+  <div class="ph"><div class="ph-left"><h1>Contact</h1><p>Manage contact details and form settings.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="saveAll()">Save Changes</button></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+    <div>
+      <div class="card"><div class="ct">Contact Details</div>
+        <div class="field"><label class="fl">WhatsApp</label><input class="fi" id="ct-wa" oninput="dirty()"></div>
+        <div class="field" style="margin-top:.6rem"><label class="fl">Email</label><input class="fi" id="ct-email" oninput="dirty()"></div>
+        <div class="field" style="margin-top:.6rem"><label class="fl">Calendly / Booking URL</label><input class="fi" id="ct-cal" oninput="dirty()"></div>
+        <div class="field" style="margin-top:.6rem"><label class="fl">LinkedIn URL</label><input class="fi" id="ct-li" oninput="dirty()"></div>
+      </div>
+      <div class="card"><div class="ct">Section Text</div>
+        <div class="bi-wrap"><div class="field"><label class="fl">Headline <span class="lb">EN</span></label><textarea class="fta" id="ct-head-en" oninput="dirty()"></textarea></div><div class="field"><label class="fl">Headline <span class="lb ar">AR</span></label><textarea class="fta" id="ct-head-ar" dir="auto" oninput="dirty()"></textarea></div></div>
+        <div class="bi-wrap" style="margin-top:.65rem"><div class="field"><label class="fl">Note <span class="lb">EN</span></label><textarea class="fta" id="ct-note-en" oninput="dirty()"></textarea></div><div class="field"><label class="fl">Note <span class="lb ar">AR</span></label><textarea class="fta" id="ct-note-ar" dir="auto" oninput="dirty()"></textarea></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card"><div class="ct">Form Field Labels</div><div id="ff-list"></div></div>
+      <div class="card" style="margin-top:.8rem"><div class="ct">Notifications</div>
+        <div class="field"><label class="fl">Send form submissions to</label><input class="fi" id="ct-notify" oninput="dirty()"></div>
+        <div class="fh" style="margin-top:.3rem">Messages are also saved in Inbox.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INBOX -->
+<div class="panel" id="panel-inbox">
+  <div class="ph"><div class="ph-left"><h1>Inbox</h1><p>Messages from the contact form.</p></div>
+    <div class="ph-right"><button class="btn btn-danger btn-sm" onclick="conf('Clear all messages?','This cannot be undone.',()=>{localStorage.setItem(\'yas_inbox\',\'[]\');renderInbox();toast(\'Inbox cleared\',\'ok\');})">Clear All</button></div>
+  </div>
+  <div id="inbox-list"></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="panel" id="panel-settings">
+  <div class="ph"><div class="ph-left"><h1>Settings</h1></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+    <div class="card"><div class="ct">Security</div>
+      <div class="field"><label class="fl">Change Password</label>
+        <div style="display:flex;gap:.4rem"><input type="password" class="fi" id="np" placeholder="New password" style="flex:1"><button class="btn btn-outline btn-sm" onclick="changePass()">Update</button></div>
+      </div>
+    </div>
+    <div class="card"><div class="ct">Data</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem 0">
+        <div><div style="font-size:.76rem">Reset to Defaults</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Restore original content</div></div>
+        <button class="btn btn-danger btn-sm" onclick="conf('Reset all data?','All custom content will be deleted.',()=>{localStorage.removeItem(SITE_DATA_KEY);location.reload();})">Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT -->
+<div class="panel" id="panel-export">
+  <div class="ph"><div class="ph-left"><h1>Export</h1><p>Download site data to publish updates.</p></div></div>
+  <div class="card"><div class="ct">How to Publish Changes</div>
+    <div style="font-size:.78rem;color:var(--t2);line-height:1.9;margin-bottom:1.1rem;padding:.9rem;background:rgba(245,158,11,.06);border:.5px solid rgba(245,158,11,.22)">
+      <strong style="color:var(--amber)">⚠</strong> Changes are saved in your browser. To apply them to the live site:<br>
+      <strong style="color:var(--t1)">1.</strong> Click <strong style="color:var(--amber)">↓ Publish</strong> in the top bar (or below) to download <code style="background:var(--s2);padding:.1rem .25rem;font-family:var(--mono)">site-data.js</code><br>
+      <strong style="color:var(--t1)">2.</strong> Upload it to your server replacing the old file<br>
+      <strong style="color:var(--t1)">3.</strong> All pages load new fonts, colors &amp; content automatically
+    </div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <button class="btn btn-teal" onclick="saveAndDownload()" style="background:var(--amber);color:#000">↓ Save &amp; Publish site-data.js</button>
+      <button class="btn btn-outline" onclick="downloadJSON()">↓ Download cases.json only</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top:.8rem"><div class="ct">Data Preview</div><div class="json-box" id="json-box"></div></div>
+</div>
+
+</div><!-- /mc -->
+</div><!-- /app -->
+
+<!-- CASE DRAWER -->
+<div class="dr-ov" id="case-ov" onclick="closeDr('case')"></div>
+<div class="dr" id="case-dr">
+  <div class="dr-hdr">
+    <span class="dr-title" id="case-dr-title">New Case Study</span>
+    <div class="dr-acts">
+      <button class="btn btn-outline btn-sm" onclick="closeDr('case')">Cancel</button>
+      <button class="btn btn-teal btn-sm" onclick="saveCase()">Save →</button>
+      <button class="dr-close" onclick="closeDr('case')">✕</button>
+    </div>
+  </div>
+  <div class="dr-body">
+    <div style="display:grid;grid-template-columns:1fr 220px;gap:1rem;align-items:start">
+      <div>
+        <div class="card"><div class="ct">Basic Info</div>
+          <div class="fg fg-2"><div class="field"><label class="fl">Title <span class="lb">EN</span></label><input class="fi" id="ce-title-en" oninput="updCasePrev()"></div><div class="field"><label class="fl">Title <span class="lb ar">AR</span></label><input class="fi" id="ce-title-ar" dir="auto"></div></div>
+          <div class="fg fg-2" style="margin-top:.65rem"><div class="field"><label class="fl">Industry <span class="lb">EN</span></label><input class="fi" id="ce-ind-en" oninput="updCasePrev()"></div><div class="field"><label class="fl">Industry <span class="lb ar">AR</span></label><input class="fi" id="ce-ind-ar" dir="auto"></div></div>
+          <div class="fg fg-2" style="margin-top:.65rem"><div class="field"><label class="fl">Scope <span class="lb">EN</span></label><input class="fi" id="ce-scope-en"></div><div class="field"><label class="fl">Scope <span class="lb ar">AR</span></label><input class="fi" id="ce-scope-ar" dir="auto"></div></div>
+          <div class="fg fg-2" style="margin-top:.65rem">
+            <div class="field"><label class="fl">Date</label><input class="fi" id="ce-date" type="month"></div>
+            <div class="field"><label class="fl">Status</label><select class="fs" id="ce-feat"><option value="false">Regular</option><option value="true">★ Featured on Homepage</option></select></div>
+          </div>
+        </div>
+        <div class="card"><div class="ct">Summary</div>
+          <div class="bi-wrap"><div class="field"><label class="fl"><span class="lb">EN</span></label><textarea class="fta" id="ce-sum-en"></textarea></div><div class="field"><label class="fl"><span class="lb ar">AR</span></label><textarea class="fta" id="ce-sum-ar" dir="auto"></textarea></div></div>
+        </div>
+        <div class="card"><div class="ct">Full Content</div>
+          <div style="margin-bottom:.9rem"><div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:.45rem">The Challenge</div>
+            <div class="bi-wrap"><div class="field"><label class="fl"><span class="lb">EN</span></label><textarea class="fta tall" id="ce-chal-en"></textarea></div><div class="field"><label class="fl"><span class="lb ar">AR</span></label><textarea class="fta tall" id="ce-chal-ar" dir="auto"></textarea></div></div></div>
+          <div style="margin-bottom:.9rem"><div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:.45rem">The Intervention</div>
+            <div class="bi-wrap"><div class="field"><label class="fl"><span class="lb">EN</span></label><textarea class="fta tall" id="ce-int-en"></textarea></div><div class="field"><label class="fl"><span class="lb ar">AR</span></label><textarea class="fta tall" id="ce-int-ar" dir="auto"></textarea></div></div></div>
+          <div><div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:.45rem">The Results</div>
+            <div class="bi-wrap"><div class="field"><label class="fl"><span class="lb">EN</span></label><textarea class="fta tall" id="ce-res-en"></textarea></div><div class="field"><label class="fl"><span class="lb ar">AR</span></label><textarea class="fta tall" id="ce-res-ar" dir="auto"></textarea></div></div></div>
+        </div>
+        <div class="card"><div class="ct">Metrics</div><div id="ce-mets"></div><button class="btn btn-outline btn-sm" onclick="addCaseMet()" style="margin-top:.45rem">+ Add</button></div>
+        <div class="card"><div class="ct">Tags</div>
+          <div class="bi-wrap">
+            <div class="field"><label class="fl">Tags <span class="lb">EN</span></label><div class="tags-box" id="tbox-en" onclick="document.getElementById('ti-en').focus()"><input class="tag-bare" id="ti-en" placeholder="Type + Enter" onkeydown="tagKey(event,'en')"></div></div>
+            <div class="field"><label class="fl">Tags <span class="lb ar">AR</span></label><div class="tags-box" id="tbox-ar" onclick="document.getElementById('ti-ar').focus()"><input class="tag-bare" id="ti-ar" dir="auto" placeholder="اكتب + Enter" onkeydown="tagKey(event,'ar')"></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Side preview + image -->
+      <div style="position:sticky;top:0">
+        <div style="background:var(--s2);border:.5px solid var(--b1);overflow:hidden;margin-bottom:.8rem">
+          <div style="aspect-ratio:16/9;background:var(--s3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center" id="case-prev-img-box">
+            <img id="case-prev-img" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none">
+            <span style="font-size:.65rem;color:var(--t3)">No image</span>
+          </div>
+          <div style="padding:.8rem">
+            <div style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:.3rem" id="case-prev-ind">Industry</div>
+            <div style="font-size:.82rem;color:var(--t1);line-height:1.3" id="case-prev-title">Title…</div>
+            <div style="display:flex;gap:.8rem;margin-top:.6rem;padding-top:.6rem;border-top:.5px solid var(--b1)" id="case-prev-mets"></div>
+          </div>
+        </div>
+        <div class="card"><div class="ct">Cover Image</div>
+          <div class="img-preview-section">
+            <img id="ce_image-prev" src="" alt="" style="height:140px;object-fit:cover;width:100%">
+            <div class="iph" id="ce_image-ph" style="height:140px"><div class="iph-ic">↑</div><div class="iph-txt">Upload image</div></div>
+          </div>
+          <div class="img-section-tools" style="flex-direction:column;gap:.35rem;align-items:stretch">
+            <input type="file" accept="image/*" onchange="uploadImg(event,'ce_image')" style="font-size:.67rem;color:var(--t2)">
+            <input type="text" class="img-url-in" id="ce_image-url" placeholder="…or paste URL" oninput="handleUrlImg('ce_image',this.value)">
+            <button class="btn btn-danger btn-xs" onclick="clearImg('ce_image')" style="align-self:flex-start">✕ Remove</button>
+          </div>
+          <input type="hidden" id="ce_image">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICE DRAWER -->
+<div class="dr-ov" id="svc-ov" onclick="closeDr('svc')"></div>
+<div class="dr" id="svc-dr">
+  <div class="dr-hdr">
+    <span class="dr-title" id="svc-dr-title">New Service</span>
+    <div class="dr-acts">
+      <button class="btn btn-outline btn-sm" onclick="closeDr('svc')">Cancel</button>
+      <button class="btn btn-teal btn-sm" onclick="saveSvc()">Save →</button>
+      <button class="dr-close" onclick="closeDr('svc')">✕</button>
+    </div>
+  </div>
+  <div class="dr-body">
+    <div class="card"><div class="ct">Service Image</div>
+      <div class="img-preview-section">
+        <img id="sv_image-prev" src="" alt="" style="height:150px;object-fit:cover;width:100%">
+        <div class="iph" id="sv_image-ph" style="height:150px"><div class="iph-ic">▦</div><div class="iph-txt">Upload thumbnail</div></div>
+      </div>
+      <div class="img-section-tools" style="flex-direction:column;gap:.35rem;align-items:stretch">
+        <input type="file" accept="image/*" onchange="uploadImg(event,'sv_image')" style="font-size:.67rem;color:var(--t2)">
+        <input type="text" class="img-url-in" id="sv_image-url" placeholder="…or paste URL" oninput="handleUrlImg('sv_image',this.value)">
+        <button class="btn btn-danger btn-xs" onclick="clearImg('sv_image')" style="align-self:flex-start">✕ Remove</button>
+      </div>
+      <input type="hidden" id="sv_image">
+    </div>
+    <div class="card"><div class="ct">Service Info</div>
+      <div class="fg fg-2"><div class="field"><label class="fl">Title <span class="lb">EN</span></label><input class="fi" id="sv-title-en"></div><div class="field"><label class="fl">Title <span class="lb ar">AR</span></label><input class="fi" id="sv-title-ar" dir="auto"></div></div>
+      <div class="fg fg-2" style="margin-top:.65rem"><div class="field"><label class="fl">Subtitle <span class="lb">EN</span></label><input class="fi" id="sv-sub-en"></div><div class="field"><label class="fl">Subtitle <span class="lb ar">AR</span></label><input class="fi" id="sv-sub-ar" dir="auto"></div></div>
+    </div>
+    <div class="card"><div class="ct">Description</div>
+      <div class="bi-wrap"><div class="field"><label class="fl"><span class="lb">EN</span></label><textarea class="fta xtall" id="sv-desc-en"></textarea></div><div class="field"><label class="fl"><span class="lb ar">AR</span></label><textarea class="fta xtall" id="sv-desc-ar" dir="auto"></textarea></div></div>
+    </div>
+    <div class="card"><div class="ct">Sub-items</div><div id="sv-items"></div><button class="btn btn-outline btn-sm" onclick="addSvcItem()" style="margin-top:.45rem">+ Add Item</button></div>
+  </div>
+</div>
+
+<!-- TESTI DRAWER -->
+<div class="dr-ov" id="testi-ov" onclick="closeDr('testi')"></div>
+<div class="dr" id="testi-dr" style="width:500px">
+  <div class="dr-hdr">
+    <span class="dr-title" id="testi-dr-title">New Testimonial</span>
+    <div class="dr-acts">
+      <button class="btn btn-outline btn-sm" onclick="closeDr('testi')">Cancel</button>
+      <button class="btn btn-teal btn-sm" onclick="saveTesti()">Save →</button>
+      <button class="dr-close" onclick="closeDr('testi')">✕</button>
+    </div>
+  </div>
+  <div class="dr-body">
+    <div class="card"><div class="ct">Client</div>
+      <div class="fg fg-2"><div class="field"><label class="fl">Name</label><input class="fi" id="te-name"></div><div class="field"><label class="fl">Role / Company</label><input class="fi" id="te-role"></div></div>
+    </div>
+    <div class="card"><div class="ct">Quote</div>
+      <div class="bi-wrap"><div class="field"><label class="fl"><span class="lb">EN</span></label><textarea class="fta xtall" id="te-quote-en"></textarea></div><div class="field"><label class="fl"><span class="lb ar">AR</span></label><textarea class="fta xtall" id="te-quote-ar" dir="auto"></textarea></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="conf-ov" id="conf-ov">
+  <div class="conf-box">
+    <div class="conf-t" id="conf-t"></div>
+    <div class="conf-s" id="conf-s"></div>
+    <div class="conf-acts"><button class="btn btn-outline btn-sm" onclick="closeConf()">Cancel</button><button class="btn btn-danger btn-sm" id="conf-ok">Confirm</button></div>
+  </div>
+</div>
+<div class="tw" id="tw"></div>
+
+<script>
+// ══ CONSTANTS ══════════════════════════════════════════
+const PASS_KEY='yas_pass2', DEF_PASS='yaser2025';
+let D = null; // site data
+let isDirty = false;
+
+// ══ AUTH ═══════════════════════════════════════════════
+function auth(){
+  const p=document.getElementById('lp').value;
+  if(p===(localStorage.getItem(PASS_KEY)||DEF_PASS)){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    initApp();
+  } else { document.getElementById('lerr').style.display='block'; }
+}
+function logout(){ document.getElementById('app').style.display='none'; document.getElementById('login').style.display='flex'; document.getElementById('lp').value=''; }
+function changePass(){ const np=document.getElementById('np').value.trim(); if(np.length<4){toast('Min 4 chars','err');return;} localStorage.setItem(PASS_KEY,np); document.getElementById('np').value=''; toast('Password updated','ok'); }
+document.getElementById('lp').addEventListener('keydown',e=>{ if(e.key==='Enter')auth(); });
+
+// ══ DIRTY ═══════════════════════════════════════════════
+function dirty(){ isDirty=true; document.getElementById('dirty-dot').classList.add('show'); }
+function clean(){ isDirty=false; document.getElementById('dirty-dot').classList.remove('show'); }
+
+// ══ INIT ════════════════════════════════════════════════
+function initApp(){
+  D = getSiteData();
+  updateBadges();
+  renderDash();
+  loadQuickFields();
+}
+
+function updateBadges(){
+  document.getElementById('b-svcs').textContent=D.services.length;
+  document.getElementById('b-cases').textContent=D.cases.length;
+  document.getElementById('b-achs').textContent=(D.achievements||[]).length;
+  const inbox=JSON.parse(localStorage.getItem('yas_inbox')||'[]');
+  const unread=inbox.filter(m=>!m.read).length;
+  document.getElementById('b-inbox').textContent=unread||'';
+}
+
+// ══ NAV ═════════════════════════════════════════════════
+function nav(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('act'));
+  const p=document.getElementById('panel-'+id); if(p) p.classList.add('act');
+  if(btn) btn.classList.add('act');
+  if(id==='dash') renderDash();
+  if(id==='hero') loadHeroPanel();
+  if(id==='images') renderAllImages();
+  if(id==='services') renderSvcs();
+  if(id==='cases') renderCases();
+  if(id==='about') loadAboutPanel();
+  if(id==='contact') loadContactPanel();
+  if(id==='inbox') renderInbox();
+  if(id==='typography') loadTypoPanel();
+  if(id==='whatsapp') loadWAPanel();
+  if(id==='export') renderExport();
+}
+
+// ══ SAVE ALL ════════════════════════════════════════════
+function saveAll(){
+  D = D || getSiteData();
+  // Quick fields
+  D.hero.headline={en:document.getElementById('qh-en').value.trim()||D.hero.headline.en, ar:document.getElementById('qh-ar').value.trim()||D.hero.headline.ar};
+  D.contact.wa=document.getElementById('qwa').value.trim()||D.contact.wa;
+  D.contact.email=document.getElementById('qem').value.trim()||D.contact.email;
+  // Panel-specific
+  if(document.getElementById('panel-hero').classList.contains('act')) collectHero();
+  if(document.getElementById('panel-about').classList.contains('act')) collectAbout();
+  if(document.getElementById('panel-contact').classList.contains('act')) collectContact();
+  if(document.getElementById('panel-whatsapp').classList.contains('act')) collectWA();
+  // Collect typography if the panel has been opened (fields populated)
+  if(document.getElementById('en-heading-font')?.value) collectTypo();
+  setSiteData(D);
+  clean(); toast('All changes saved!','ok'); updateBadges();
+  loadQuickFields();
+}
+
+function loadQuickFields(){
+  document.getElementById('qh-en').value=D.hero.headline?.en||'';
+  document.getElementById('qh-ar').value=D.hero.headline?.ar||'';
+  document.getElementById('qwa').value=D.contact.wa||'';
+  document.getElementById('qem').value=D.contact.email||'';
+}
+
+// ══ DASHBOARD ═══════════════════════════════════════════
+function renderDash(){
+  const cases=D.cases||[], svcs=D.services||[];
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat"><div class="stat-n">${cases.length}</div><div class="stat-l">Cases</div></div>
+    <div class="stat"><div class="stat-n">${svcs.length}</div><div class="stat-l">Services</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--teal)">${cases.some(c=>c.featured)?'✓':'–'}</div><div class="stat-l">Featured Set</div></div>
+    <div class="stat"><div class="stat-n">${cases.filter(c=>c.image&&!c.image.startsWith('data:image/svg')).length}</div><div class="stat-l">Real Images</div></div>
+    <div class="stat"><div class="stat-n">${JSON.parse(localStorage.getItem('yas_inbox')||'[]').filter(m=>!m.read).length||0}</div><div class="stat-l">Unread Msgs</div></div>`;
+  document.getElementById('dash-tbody').innerHTML=cases.slice(0,6).map(c=>`
+    <tr><td>${imgCell(c)}</td><td><div class="col-t">${c.title?.en||'—'}</div></td><td style="color:var(--t2)">${c.industry?.en||'—'}</td>
+    <td>${c.featured?'<span class="chip chip-teal">★ Featured</span>':'<span class="chip chip-gray">Regular</span>'}</td>
+    <td><div class="td-acts"><button class="btn btn-outline btn-sm" onclick="editCase('${c.id}')">Edit</button>${!c.featured?`<button class="btn btn-amber btn-sm" onclick="setFeat('${c.id}')">★</button>`:''}</div></td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--t3)">No cases</td></tr>';
+}
+
+// ══ ALL IMAGES PANEL ════════════════════════════════════
+function renderAllImages(){
+  const d=D;
+  let html=`<div class="card"><div class="ct">Hero Background</div>${imgSectionEditor('hero_img',d.hero.image,'Hero Background Image','hero')}</div>`;
+  html+=`<div class="card" style="margin-top:.8rem"><div class="ct">Consultant Profile Photo</div>${imgSectionEditor('ab_photo',d.about.photo,'Profile Photo (3:4 ratio)','about')}</div>`;
+  html+=`<div class="card" style="margin-top:.8rem"><div class="ct">Services Cover Images</div>`;
+  (d.services||[]).forEach((s,i)=>{
+    html+=`<div style="margin-bottom:.6rem"><div style="font-size:.7rem;color:var(--t2);margin-bottom:.3rem">Service 0${i+1}: ${s.title?.en||''}</div>${imgSectionEditor('svc_img_'+s.id,s.image,'Service Thumbnail',null,s.id,'service')}</div>`;
+  });
+  html+=`</div>`;
+  html+=`<div class="card" style="margin-top:.8rem"><div class="ct">Case Study Cover Images</div>`;
+  (d.cases||[]).forEach((c,i)=>{
+    html+=`<div style="margin-bottom:.6rem"><div style="font-size:.7rem;color:var(--t2);margin-bottom:.3rem">Case: ${c.title?.en?.substring(0,55)||''}</div>${imgSectionEditor('case_img_'+c.id,c.image,'Case Cover (16:9)',null,c.id,'case')}</div>`;
+  });
+  html+=`</div>`;
+  document.getElementById('all-images-panel').innerHTML=html;
+  // Re-init previews
+  document.querySelectorAll('[data-img-key]').forEach(el=>{
+    const key=el.dataset.imgKey, val=el.dataset.imgVal;
+    if(val&&!val.includes('placeholder'))setImgPrev(key,val);
+  });
+}
+
+function imgSectionEditor(key,currentVal,label,section,itemId,itemType){
+  const hasReal=currentVal&&!currentVal.startsWith('data:image/svg');
+  return `<div data-img-key="${key}" data-img-val="${currentVal||''}">
+    <div class="img-preview-section">
+      <img id="${key}-prev" src="${hasReal?currentVal:''}" alt="" style="height:140px;object-fit:cover;width:100%;${hasReal?'':'display:none'}">
+      <div class="iph" id="${key}-ph" style="height:140px;${hasReal?'display:none':''}"><div class="iph-ic">◻</div><div class="iph-txt">${label}</div></div>
+    </div>
+    <div class="img-section-tools">
+      <span class="img-section-label" style="font-size:.6rem">${label}</span>
+      <input type="file" accept="image/*" onchange="uploadImg(event,'${key}','${section||''}','${itemId||''}','${itemType||''}')" style="font-size:.65rem;color:var(--t2)">
+      <input type="text" class="img-url-in" id="${key}-url" placeholder="…or paste URL" style="flex:1" oninput="handleUrlImg('${key}',this.value,'${section||''}','${itemId||''}','${itemType||''}')">
+      <button class="btn btn-danger btn-xs" onclick="clearSectionImg('${key}','${section||''}','${itemId||''}','${itemType||''}')">✕</button>
+    </div>
+    <input type="hidden" id="${key}">
+  </div>`;
+}
+
+// ══ HERO PANEL ══════════════════════════════════════════
+function loadHeroPanel(){
+  const h=D.hero;
+  // Hero image
+  const realImg=h.image&&!h.image.startsWith('data:image/svg');
+  if(realImg){document.getElementById('hero-img-prev').src=h.image;document.getElementById('hero-img-prev').style.display='block';document.getElementById('hero-img-ph').style.display='none';document.getElementById('hero_img').value=h.image;}
+  // Text
+  const sv=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'';};
+  sv('h-hl-en',h.headline?.en);sv('h-hl-ar',h.headline?.ar);
+  sv('h-sub-en',h.sub?.en);sv('h-sub-ar',h.sub?.ar);
+  sv('h-cta-en',h.cta?.en);sv('h-cta-ar',h.cta?.ar);
+  renderHeroStats(h.stats||[]);renderValCards(h.values||[]);
+}
+function collectHero(){
+  const g=id=>document.getElementById(id)?.value.trim()||'';
+  D.hero.image=document.getElementById('hero_img').value||D.hero.image;
+  D.hero.headline={en:g('h-hl-en'),ar:g('h-hl-ar')};
+  D.hero.sub={en:g('h-sub-en'),ar:g('h-sub-ar')};
+  D.hero.cta={en:g('h-cta-en'),ar:g('h-cta-ar')};
+  D.hero.stats=[]; document.querySelectorAll('.hs-row').forEach(r=>{const n=r.querySelector('.hs-num')?.value.trim();if(n)D.hero.stats.push({num:n,label:{en:r.querySelector('.hs-en')?.value.trim(),ar:r.querySelector('.hs-ar')?.value.trim()}});});
+  D.hero.values=[]; document.querySelectorAll('.vc-row').forEach(r=>{D.hero.values.push({num:r.querySelector('.vc-num')?.value.trim(),title:{en:r.querySelector('.vc-te')?.value.trim(),ar:r.querySelector('.vc-ta')?.value.trim()},text:{en:r.querySelector('.vc-de')?.value.trim(),ar:r.querySelector('.vc-da')?.value.trim()}});});
+  document.getElementById('qh-en').value=D.hero.headline.en;
+  document.getElementById('qh-ar').value=D.hero.headline.ar;
+}
+function renderHeroStats(stats){
+  document.getElementById('hero-stats-list').innerHTML=stats.map(s=>`<div class="sort-item hs-row"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:75px 1fr 1fr;gap:.45rem;align-items:center;flex:1"><input class="fi hs-num" value="${s.num||''}" placeholder="20+" oninput="dirty()" style="text-align:center;font-size:1rem"><input class="fi hs-en" value="${s.label?.en||''}" placeholder="Label EN" oninput="dirty()"><input class="fi hs-ar" value="${s.label?.ar||''}" placeholder="التسمية" dir="auto" oninput="dirty()"></div><button class="btn btn-danger btn-xs" onclick="this.closest('.sort-item').remove();dirty()">✕</button></div>`).join('');
+}
+function addHeroStat(){ document.getElementById('hero-stats-list').insertAdjacentHTML('beforeend','<div class="sort-item hs-row"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:75px 1fr 1fr;gap:.45rem;align-items:center;flex:1"><input class="fi hs-num" placeholder="0+" oninput="dirty()"><input class="fi hs-en" placeholder="Label EN" oninput="dirty()"><input class="fi hs-ar" placeholder="التسمية" dir="auto" oninput="dirty()"></div><button class="btn btn-danger btn-xs" onclick="this.closest(\'.sort-item\').remove();dirty()">✕</button></div>'); dirty(); }
+function renderValCards(vals){
+  document.getElementById('val-cards-list').innerHTML=vals.map(v=>`<div class="sort-item vc-row" style="align-items:flex-start"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:55px 1fr 1fr;gap:.45rem;flex:1"><input class="fi vc-num" value="${v.num||''}" placeholder="01" oninput="dirty()"><input class="fi vc-te" value="${v.title?.en||''}" placeholder="Title EN" oninput="dirty()"><input class="fi vc-ta" value="${v.title?.ar||''}" placeholder="العنوان" dir="auto" oninput="dirty()"><div></div><textarea class="fta vc-de" style="margin-top:.3rem" oninput="dirty()">${v.text?.en||''}</textarea><textarea class="fta vc-da" style="margin-top:.3rem" dir="auto" oninput="dirty()">${v.text?.ar||''}</textarea></div><button class="btn btn-danger btn-xs" style="margin-top:.2rem" onclick="this.closest('.sort-item').remove();dirty()">✕</button></div>`).join('');
+}
+function addValCard(){ const n=document.querySelectorAll('.vc-row').length+1; document.getElementById('val-cards-list').insertAdjacentHTML('beforeend',`<div class="sort-item vc-row" style="align-items:flex-start"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:55px 1fr 1fr;gap:.45rem;flex:1"><input class="fi vc-num" value="0${n}" oninput="dirty()"><input class="fi vc-te" placeholder="Title EN" oninput="dirty()"><input class="fi vc-ta" placeholder="العنوان" dir="auto" oninput="dirty()"><div></div><textarea class="fta vc-de" style="margin-top:.3rem" placeholder="Text EN" oninput="dirty()"></textarea><textarea class="fta vc-da" style="margin-top:.3rem" placeholder="الوصف" dir="auto" oninput="dirty()"></textarea></div><button class="btn btn-danger btn-xs" style="margin-top:.2rem" onclick="this.closest('.sort-item').remove();dirty()">✕</button></div>`); dirty(); }
+
+// ══ SERVICES ════════════════════════════════════════════
+let editSvcId=null;
+function renderSvcs(){
+  const svcs=D.services||[];
+  const el=document.getElementById('svcs-list');
+  if(!svcs.length){el.innerHTML='<div class="empty"><div class="empty-ic">▦</div><div class="empty-t">No services</div></div>';return;}
+  el.innerHTML=svcs.map((s,i)=>`<div class="sort-item"><span class="sort-h">⠿</span>
+    ${s.image&&!s.image.startsWith('data:image/svg')?`<img src="${s.image}" style="width:55px;height:38px;object-fit:cover;border:.5px solid var(--b1);flex-shrink:0">`:`<div style="width:55px;height:38px;background:var(--s3);border:.5px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--t3);flex-shrink:0">IMG</div>`}
+    <div class="sort-body"><div class="sort-title">0${i+1}. ${s.title?.en||'—'}</div><div class="sort-sub">${s.sub?.en||''}</div></div>
+    <div class="sort-acts"><button class="btn btn-outline btn-sm" onclick="editSvc('${s.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="conf('Delete service?','',()=>delSvc('${s.id}'))">Del</button></div>
+  </div>`).join('');
+}
+function openSvcDr(){editSvcId=null;clearSvcDr();document.getElementById('svc-dr-title').textContent='New Service';openDr('svc');}
+function editSvc(id){editSvcId=id;const s=D.services.find(x=>x.id===id);if(!s)return;document.getElementById('svc-dr-title').textContent='Edit Service';const sv=(fid,v)=>{const el=document.getElementById(fid);if(el)el.value=v||'';}; sv('sv-title-en',s.title?.en);sv('sv-title-ar',s.title?.ar);sv('sv-sub-en',s.sub?.en);sv('sv-sub-ar',s.sub?.ar);sv('sv-desc-en',s.desc?.en);sv('sv-desc-ar',s.desc?.ar); renderSvcItems(s.items||[]); if(s.image&&!s.image.startsWith('data:image/svg')){setImgPrev('sv_image',s.image);}else{clearImg('sv_image');} openDr('svc');}
+function clearSvcDr(){['sv-title-en','sv-title-ar','sv-sub-en','sv-sub-ar','sv-desc-en','sv-desc-ar'].forEach(id=>document.getElementById(id).value='');document.getElementById('sv-items').innerHTML='';clearImg('sv_image');}
+function renderSvcItems(items){document.getElementById('sv-items').innerHTML=items.map((it,i)=>`<div class="sort-item" style="align-items:flex-start"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;flex:1"><textarea class="fta sv-item-en" style="min-height:52px">${it.en||''}</textarea><textarea class="fta sv-item-ar" dir="auto" style="min-height:52px">${it.ar||''}</textarea></div><button class="btn btn-danger btn-xs" onclick="this.closest('.sort-item').remove()">✕</button></div>`).join('');}
+function addSvcItem(){document.getElementById('sv-items').insertAdjacentHTML('beforeend','<div class="sort-item" style="align-items:flex-start"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;flex:1"><textarea class="fta sv-item-en" style="min-height:52px" placeholder="Item EN"></textarea><textarea class="fta sv-item-ar" dir="auto" style="min-height:52px" placeholder="العنصر"></textarea></div><button class="btn btn-danger btn-xs" onclick="this.closest(\'.sort-item\').remove()">✕</button></div>');}
+function saveSvc(){const te=document.getElementById('sv-title-en').value.trim();if(!te){toast('Title required','err');return;} const items=[];document.querySelectorAll('.sv-item-en').forEach((el,i)=>{const ar=document.querySelectorAll('.sv-item-ar')[i];if(el.value.trim())items.push({en:el.value.trim(),ar:ar?.value.trim()||''});});const svc={id:editSvcId||('sv'+Date.now()),image:document.getElementById('sv_image').value||'',title:{en:te,ar:document.getElementById('sv-title-ar').value.trim()},sub:{en:document.getElementById('sv-sub-en').value.trim(),ar:document.getElementById('sv-sub-ar').value.trim()},desc:{en:document.getElementById('sv-desc-en').value.trim(),ar:document.getElementById('sv-desc-ar').value.trim()},items};if(editSvcId){const i=D.services.findIndex(s=>s.id===editSvcId);if(i>-1)D.services[i]=svc;else D.services.push(svc);}else D.services.push(svc);setSiteData(D);closeDr('svc');renderSvcs();updateBadges();toast('Service saved!','ok');}
+function delSvc(id){D.services=D.services.filter(s=>s.id!==id);setSiteData(D);renderSvcs();updateBadges();toast('Service deleted','ok');}
+
+// ══ CASES ═══════════════════════════════════════════════
+let editCaseId=null, caseTEN=[], caseTAR=[], caseMetN=0;
+function renderCases(){
+  const cases=D.cases||[], el=document.getElementById('cases-tbody');
+  if(!cases.length){el.innerHTML='<tr><td colspan="6"><div class="empty"><div class="empty-ic">◉</div><div class="empty-t">No cases</div></div></td></tr>';return;}
+  el.innerHTML=cases.map(c=>`<tr><td>${imgCell(c)}</td><td><div class="col-t">${c.title?.en||'—'}</div><div style="font-size:.66rem;color:var(--t3);margin-top:.1rem" dir="auto">${c.title?.ar||''}</div></td><td style="color:var(--t2);font-size:.72rem">${c.industry?.en||'—'}</td><td style="color:var(--t3);font-size:.72rem">${c.date||'—'}</td><td>${c.featured?'<span class="chip chip-teal">★ Featured</span>':'<span class="chip chip-gray">Regular</span>'}</td><td><div class="td-acts"><button class="btn btn-outline btn-sm" onclick="editCase('${c.id}')">Edit</button>${!c.featured?`<button class="btn btn-amber btn-sm" onclick="setFeat('${c.id}')">★</button>`:''}<button class="btn btn-danger btn-sm" onclick="conf('Delete case?','This cannot be undone.',()=>delCase('${c.id}'))">Del</button></div></td></tr>`).join('');
+}
+function imgCell(c){return c.image&&!c.image.startsWith('data:image/svg')?`<img class="tbl-img" src="${c.image}" alt="" onerror="this.style.display='none'">`:`<div class="tbl-ph">—</div>`;}
+function openCaseDr(){editCaseId=null;resetCaseDr();document.getElementById('case-dr-title').textContent='New Case Study';openDr('case');}
+function resetCaseDr(){['ce-title-en','ce-title-ar','ce-ind-en','ce-ind-ar','ce-scope-en','ce-scope-ar','ce-sum-en','ce-sum-ar','ce-chal-en','ce-chal-ar','ce-int-en','ce-int-ar','ce-res-en','ce-res-ar'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('ce-date').value='';document.getElementById('ce-feat').value='false';caseTEN=[];caseTAR=[];renderTags();caseMetN=0;document.getElementById('ce-mets').innerHTML='';addCaseMet();addCaseMet();addCaseMet();clearImg('ce_image');updCasePrev();}
+function editCase(id){editCaseId=id;const c=D.cases.find(x=>x.id===id);if(!c)return;document.getElementById('case-dr-title').textContent='Edit Case';const sv=(fid,v)=>{const el=document.getElementById(fid);if(el)el.value=v||'';};sv('ce-title-en',c.title?.en);sv('ce-title-ar',c.title?.ar);sv('ce-ind-en',c.industry?.en);sv('ce-ind-ar',c.industry?.ar);sv('ce-scope-en',c.scope?.en);sv('ce-scope-ar',c.scope?.ar);sv('ce-sum-en',c.summary?.en);sv('ce-sum-ar',c.summary?.ar);sv('ce-chal-en',c.challenge?.en);sv('ce-chal-ar',c.challenge?.ar);sv('ce-int-en',c.intervention?.en);sv('ce-int-ar',c.intervention?.ar);sv('ce-res-en',c.results?.en);sv('ce-res-ar',c.results?.ar);sv('ce-date',c.date);document.getElementById('ce-feat').value=c.featured?'true':'false';caseTEN=[...(c.tags_en||[])];caseTAR=[...(c.tags_ar||[])];renderTags();caseMetN=0;document.getElementById('ce-mets').innerHTML='';(c.metrics||[]).forEach(m=>addCaseMet(m));if(!c.metrics?.length)addCaseMet();if(c.image&&!c.image.startsWith('data:image/svg')){setImgPrev('ce_image',c.image);}else{clearImg('ce_image');}updCasePrev();openDr('case');}
+function saveCase(){const te=document.getElementById('ce-title-en').value.trim();if(!te){toast('Title required','err');return;}const g=id=>document.getElementById(id)?.value.trim()||'';const mets=[];document.querySelectorAll('#ce-mets .cm-row').forEach(r=>{const v=r.querySelector('.cm-v')?.value.trim();if(v)mets.push({value:v,unit:'',label_en:r.querySelector('.cm-le')?.value.trim()||'',label_ar:r.querySelector('.cm-la')?.value.trim()||''});});const isFeat=g('ce-feat')==='true';const nc={id:editCaseId||('c'+Date.now()),featured:isFeat,date:g('ce-date'),industry:{en:g('ce-ind-en'),ar:g('ce-ind-ar')},scope:{en:g('ce-scope-en'),ar:g('ce-scope-ar')},title:{en:te,ar:g('ce-title-ar')},summary:{en:g('ce-sum-en'),ar:g('ce-sum-ar')},challenge:{en:g('ce-chal-en'),ar:g('ce-chal-ar')},intervention:{en:g('ce-int-en'),ar:g('ce-int-ar')},results:{en:g('ce-res-en'),ar:g('ce-res-ar')},metrics:mets,tags_en:[...caseTEN],tags_ar:[...caseTAR],image:document.getElementById('ce_image').value||''};if(isFeat)D.cases.forEach(c=>c.featured=false);if(editCaseId){const i=D.cases.findIndex(c=>c.id===editCaseId);if(i>-1)D.cases[i]=nc;else D.cases.push(nc);}else D.cases.push(nc);setSiteData(D);closeDr('case');renderCases();renderDash();updateBadges();toast('Case saved!','ok');}
+function delCase(id){D.cases=D.cases.filter(c=>c.id!==id);if(D.cases.length&&!D.cases.some(c=>c.featured))D.cases[0].featured=true;setSiteData(D);renderCases();renderDash();updateBadges();toast('Case deleted','ok');}
+function setFeat(id){D.cases.forEach(c=>c.featured=(c.id===id));setSiteData(D);renderCases();renderDash();toast('Featured updated!','ok');}
+function addCaseMet(data={}){if(caseMetN>=4)return;caseMetN++;document.getElementById('ce-mets').insertAdjacentHTML('beforeend',`<div class="met-row cm-row"><div class="field" style="margin:0"><label class="fl">Value</label><input class="fi cm-v" value="${data.value||''}" placeholder="100M" oninput="updCasePrev()"></div><div class="field" style="margin:0"><label class="fl">Label EN</label><input class="fi cm-le" value="${data.label_en||''}" placeholder="Result" oninput="updCasePrev()"></div><div class="field" style="margin:0"><label class="fl">Label AR</label><input class="fi cm-la" value="${data.label_ar||''}" placeholder="النتيجة" dir="auto"></div><div style="align-self:flex-end"><button class="btn btn-danger btn-xs" onclick="this.closest('.cm-row').remove();caseMetN=Math.max(0,caseMetN-1);updCasePrev()">✕</button></div></div>`);}
+function tagKey(e,lang){if(e.key==='Enter'||e.key===','){e.preventDefault();const v=e.target.value.trim().replace(',','');if(!v)return;if(lang==='en')caseTEN.push(v);else caseTAR.push(v);e.target.value='';renderTags();}if(e.key==='Backspace'&&!e.target.value){if(lang==='en'&&caseTEN.length){caseTEN.pop();renderTags();}if(lang==='ar'&&caseTAR.length){caseTAR.pop();renderTags();}}}
+function renderTags(){['en','ar'].forEach(lang=>{const tags=lang==='en'?caseTEN:caseTAR;const box=document.getElementById(`tbox-${lang}`);const input=document.getElementById(`ti-${lang}`);box.querySelectorAll('.tag-chip').forEach(el=>el.remove());tags.forEach((t,i)=>{const chip=document.createElement('span');chip.className='tag-chip';chip.innerHTML=`${t}<button onclick="rmTag('${lang}',${i})">✕</button>`;box.insertBefore(chip,input);});});}
+function rmTag(lang,i){if(lang==='en')caseTEN.splice(i,1);else caseTAR.splice(i,1);renderTags();}
+function updCasePrev(){document.getElementById('case-prev-ind').textContent=document.getElementById('ce-ind-en')?.value||'Industry';document.getElementById('case-prev-title').textContent=document.getElementById('ce-title-en')?.value||'Title…';const img=document.getElementById('ce_image')?.value;const pi=document.getElementById('case-prev-img');if(img&&!img.startsWith('data:image/svg')){pi.src=img;pi.style.display='block';document.getElementById('case-prev-img-box').querySelector('span').style.display='none';}else{pi.style.display='none';document.getElementById('case-prev-img-box').querySelector('span').style.display='';}const mets=[];document.querySelectorAll('.cm-v').forEach((el,i)=>{const v=el.value.trim();const l=document.querySelectorAll('.cm-le')[i]?.value.trim();if(v)mets.push({v,l});});document.getElementById('case-prev-mets').innerHTML=mets.slice(0,3).map(m=>`<div><div style="font-size:1.1rem;color:var(--teal)">${m.v}</div><div style="font-size:.58rem;color:var(--t2);text-transform:uppercase;letter-spacing:.08em">${m.l||'—'}</div></div>`).join('');}
+
+// ══ ABOUT ═══════════════════════════════════════════════
+let editTestiId=null;
+function loadAboutPanel(){
+  const ab=D.about;
+  const sv=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'';};
+  sv('ab-name-en',ab.name?.en);sv('ab-name-ar',ab.name?.ar);sv('ab-role-en',ab.role?.en);sv('ab-role-ar',ab.role?.ar);sv('ab-bio-en',ab.bio?.en);sv('ab-bio-ar',ab.bio?.ar);sv('ab-years',ab.years);
+  if(ab.photo&&!ab.photo.startsWith('data:image/svg')){setImgPrev('ab_photo',ab.photo);}
+  renderPillars(ab.pillars||[]);renderQuals(ab.quals||[]);renderTestis(ab.testimonials||[]);
+}
+function collectAbout(){
+  const g=id=>document.getElementById(id)?.value.trim()||'';
+  D.about.name={en:g('ab-name-en'),ar:g('ab-name-ar')};D.about.role={en:g('ab-role-en'),ar:g('ab-role-ar')};D.about.bio={en:g('ab-bio-en'),ar:g('ab-bio-ar')};D.about.years=g('ab-years');
+  const photo=document.getElementById('ab_photo').value;if(photo)D.about.photo=photo;
+  D.about.pillars=[];document.querySelectorAll('.pl-row').forEach(r=>{D.about.pillars.push({label:{en:r.querySelector('.pl-le')?.value.trim(),ar:r.querySelector('.pl-la')?.value.trim()},text:{en:r.querySelector('.pt-e')?.value.trim(),ar:r.querySelector('.pt-a')?.value.trim()}});});
+  D.about.quals=[];document.querySelectorAll('.ql-row').forEach(r=>{const en=r.querySelector('.ql-e')?.value.trim();if(en)D.about.quals.push({en,ar:r.querySelector('.ql-a')?.value.trim()});});
+}
+function renderPillars(pils){document.getElementById('pillars-list').innerHTML=pils.map((p,i)=>`<div class="sort-item pl-row"><span class="sort-h">⠿</span><input class="fi pl-le" value="${p.label?.en||''}" placeholder="Label EN" style="width:100px" oninput="dirty()"><input class="fi pl-la" value="${p.label?.ar||''}" placeholder="التسمية" dir="auto" style="width:100px" oninput="dirty()"><input class="fi pt-e" value="${p.text?.en||''}" placeholder="Text EN" oninput="dirty()"><input class="fi pt-a" value="${p.text?.ar||''}" placeholder="النص" dir="auto" oninput="dirty()"><button class="btn btn-danger btn-xs" onclick="this.closest('.sort-item').remove();dirty()">✕</button></div>`).join('');}
+function renderQuals(quals){document.getElementById('quals-list').innerHTML=quals.map((q,i)=>`<div class="sort-item ql-row" style="align-items:flex-start"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;flex:1"><input class="fi ql-e" value="${q.en||''}" oninput="dirty()"><input class="fi ql-a" value="${q.ar||''}" dir="auto" oninput="dirty()"></div><button class="btn btn-danger btn-xs" onclick="this.closest('.sort-item').remove();dirty()">✕</button></div>`).join('');}
+function addQual(){document.getElementById('quals-list').insertAdjacentHTML('beforeend','<div class="sort-item ql-row" style="align-items:flex-start"><span class="sort-h">⠿</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;flex:1"><input class="fi ql-e" placeholder="Qualification EN" oninput="dirty()"><input class="fi ql-a" placeholder="المؤهل" dir="auto" oninput="dirty()"></div><button class="btn btn-danger btn-xs" onclick="this.closest(\'.sort-item\').remove();dirty()">✕</button></div>');dirty();}
+function renderTestis(testis){document.getElementById('testis-list').innerHTML=testis.length?testis.map(t=>`<div class="testi-card"><div><div class="tn">${t.name||'—'}</div><div class="tr">${t.role||''}</div><div class="tt">${t.quote?.en||''}</div></div><div class="td-acts"><button class="btn btn-outline btn-xs" onclick="editTesti('${t.id}')">Edit</button><button class="btn btn-danger btn-xs" onclick="delTesti('${t.id}')">Del</button></div></div>`).join(''):'<div class="empty"><div class="empty-ic">✦</div><div class="empty-t">No testimonials</div></div>';}
+function openTestiDr(){editTestiId=null;['te-name','te-role','te-quote-en','te-quote-ar'].forEach(id=>document.getElementById(id).value='');document.getElementById('testi-dr-title').textContent='New Testimonial';openDr('testi');}
+function editTesti(id){editTestiId=id;const t=D.about.testimonials?.find(x=>x.id===id);if(!t)return;document.getElementById('te-name').value=t.name||'';document.getElementById('te-role').value=t.role||'';document.getElementById('te-quote-en').value=t.quote?.en||'';document.getElementById('te-quote-ar').value=t.quote?.ar||'';document.getElementById('testi-dr-title').textContent='Edit Testimonial';openDr('testi');}
+function saveTesti(){const name=document.getElementById('te-name').value.trim();if(!name){toast('Name required','err');return;}if(!D.about.testimonials)D.about.testimonials=[];const t={id:editTestiId||('t'+Date.now()),name,role:document.getElementById('te-role').value.trim(),quote:{en:document.getElementById('te-quote-en').value.trim(),ar:document.getElementById('te-quote-ar').value.trim()}};if(editTestiId){const i=D.about.testimonials.findIndex(x=>x.id===editTestiId);if(i>-1)D.about.testimonials[i]=t;else D.about.testimonials.push(t);}else D.about.testimonials.push(t);setSiteData(D);closeDr('testi');renderTestis(D.about.testimonials);toast('Testimonial saved!','ok');}
+function delTesti(id){D.about.testimonials=(D.about.testimonials||[]).filter(t=>t.id!==id);setSiteData(D);renderTestis(D.about.testimonials);toast('Deleted','ok');}
+
+// ══ CONTACT ══════════════════════════════════════════════
+function loadContactPanel(){
+  const ct=D.contact;
+  const sv=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'';};
+  sv('ct-wa',ct.wa);sv('ct-email',ct.email);sv('ct-cal',ct.cal);sv('ct-li',ct.linkedin);sv('ct-head-en',ct.head?.en);sv('ct-head-ar',ct.head?.ar);sv('ct-note-en',ct.note?.en);sv('ct-note-ar',ct.note?.ar);sv('ct-notify',ct.notify);
+  renderFFList(ct.formFields||[]);
+}
+function collectContact(){
+  const g=id=>document.getElementById(id)?.value.trim()||'';
+  D.contact.wa=g('ct-wa');D.contact.email=g('ct-email');D.contact.cal=g('ct-cal');D.contact.linkedin=g('ct-li');D.contact.head={en:g('ct-head-en'),ar:g('ct-head-ar')};D.contact.note={en:g('ct-note-en'),ar:g('ct-note-ar')};D.contact.notify=g('ct-notify');
+  D.contact.formFields=[];document.querySelectorAll('.ff-row').forEach(r=>{D.contact.formFields.push({label:{en:r.querySelector('.ff-e')?.value.trim(),ar:r.querySelector('.ff-a')?.value.trim()}});});
+  document.getElementById('qwa').value=D.contact.wa;document.getElementById('qem').value=D.contact.email;
+}
+function renderFFList(fields){document.getElementById('ff-list').innerHTML=fields.map((f,i)=>`<div class="sort-item ff-row"><span class="sort-h">⠿</span><input class="fi ff-e" value="${f.label?.en||''}" placeholder="Field EN" oninput="dirty()"><input class="fi ff-a" value="${f.label?.ar||''}" placeholder="الحقل" dir="auto" oninput="dirty()"><button class="btn btn-danger btn-xs" onclick="this.closest('.sort-item').remove();dirty()">✕</button></div>`).join('');}
+
+// ══ INBOX ════════════════════════════════════════════════
+function renderInbox(){
+  const msgs=JSON.parse(localStorage.getItem('yas_inbox')||'[]');
+  updateBadges();
+  const el=document.getElementById('inbox-list');
+  if(!msgs.length){el.innerHTML='<div class="empty"><div class="empty-ic">✉</div><div class="empty-t">No messages yet</div></div>';return;}
+  el.innerHTML=msgs.slice().reverse().map(m=>`<div class="msg-item ${m.read?'':'unread'}" onclick="markRead('${m.id}');this.classList.remove('unread')"><div><div class="mn">${m.name||'Anonymous'}</div><div class="mc2">${m.company||'—'}</div><div class="mp">${m.message||m.email||''}</div></div><div class="mm"><div>${m.date||''}</div><div style="margin-top:.35rem"><button class="btn btn-danger btn-xs" onclick="delMsg('${m.id}');event.stopPropagation()">Del</button></div></div></div>`).join('');
+}
+function markRead(id){const msgs=JSON.parse(localStorage.getItem('yas_inbox')||'[]');const m=msgs.find(x=>x.id===id);if(m)m.read=true;localStorage.setItem('yas_inbox',JSON.stringify(msgs));updateBadges();}
+function delMsg(id){const msgs=JSON.parse(localStorage.getItem('yas_inbox')||'[]').filter(m=>m.id!==id);localStorage.setItem('yas_inbox',JSON.stringify(msgs));renderInbox();}
+
+// ══ IMAGE MANAGEMENT ════════════════════════════════════
+function uploadImg(e,key,section,itemId,itemType){
+  const file=e.target.files[0];if(!file)return;
+  if(file.size>5*1024*1024){toast('Max 5MB','err');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{setImgSrc(key,ev.target.result,section,itemId,itemType);};
+  reader.readAsDataURL(file);
+}
+function handleUrlImg(key,url,section,itemId,itemType){if(url.length>10)setImgSrc(key,url,section,itemId,itemType);}
+function setImgSrc(key,src,section,itemId,itemType){
+  const hid=document.getElementById(key);if(hid)hid.value=src;
+  setImgPrev(key,src);
+  // Apply to data
+  if(key==='hero_img'){D.hero.image=src;}
+  else if(key==='ab_photo'){D.about.photo=src;}
+  else if(itemType==='service'&&itemId){const s=D.services.find(x=>x.id===itemId);if(s)s.image=src;}
+  else if(itemType==='case'&&itemId){const c=D.cases.find(x=>x.id===itemId);if(c)c.image=src;}
+  else if(key==='ce_image'){updCasePrev();}
+  dirty();
+}
+function setImgPrev(key,src){
+  const prev=document.getElementById(key+'-prev');const ph=document.getElementById(key+'-ph');
+  if(prev){prev.src=src;prev.style.display='block';}
+  if(ph)ph.style.display='none';
+}
+function clearImg(key,section,itemId,itemType){
+  const hid=document.getElementById(key);if(hid)hid.value='';
+  const prev=document.getElementById(key+'-prev');const ph=document.getElementById(key+'-ph');
+  if(prev){prev.src='';prev.style.display='none';}
+  if(ph)ph.style.display='flex';
+  const urlIn=document.getElementById(key+'-url');if(urlIn)urlIn.value='';
+  if(key==='hero_img')D.hero.image='';
+  else if(key==='ab_photo')D.about.photo='';
+  else if(itemType==='service'&&itemId){const s=D.services.find(x=>x.id===itemId);if(s)s.image='';}
+  else if(itemType==='case'&&itemId){const c=D.cases.find(x=>x.id===itemId);if(c)c.image='';}
+  if(key==='ce_image')updCasePrev();
+  dirty();
+}
+function clearSectionImg(key,section,itemId,itemType){clearImg(key,section,itemId,itemType);}
+function handleUrlImg(key,url,section,itemId,itemType){if(url&&url.length>10)setImgSrc(key,url,section,itemId,itemType);}
+
+// Drag-drop support
+document.addEventListener('dragover',e=>e.preventDefault());
+
+// ══ ACHIEVEMENTS ════════════════════════════════════════
+function renderAchs(){
+  const achs=D.achievements||[];
+  const el=document.getElementById('ach-list');
+  if(!achs.length){el.innerHTML='<div class="empty"><div class="empty-ic">🏆</div><div class="empty-t">No achievements yet</div><div class="empty-s">Click "+ Add Achievement" to get started.</div></div>';return;}
+  el.innerHTML=achs.map((a,i)=>`
+    <div class="sort-item ach-row" data-id="${a.id}">
+      <span class="sort-h" style="font-size:1.2rem">⠿</span>
+      <div style="font-size:1.5rem;width:2rem;text-align:center;flex-shrink:0">${a.icon||'◆'}</div>
+      <div style="display:grid;grid-template-columns:90px 1fr 1fr auto;gap:.45rem;align-items:center;flex:1">
+        <input class="fi ach-num" value="${a.number||''}" placeholder="100M+" oninput="dirty()" style="text-align:center;font-size:1rem;font-weight:400">
+        <input class="fi ach-le" value="${a.label?.en||''}" placeholder="Label EN" oninput="dirty()">
+        <input class="fi ach-la" value="${a.label?.ar||''}" placeholder="التسمية AR" dir="auto" oninput="dirty()">
+        <input class="fi ach-ic" value="${a.icon||''}" placeholder="🏆" style="width:48px;text-align:center;font-size:1.2rem" oninput="this.closest('.sort-item').querySelector('div:nth-child(2)').textContent=this.value||'◆';dirty()">
+      </div>
+      <button class="btn btn-danger btn-xs" onclick="conf('Delete achievement?','',()=>delAch('${a.id}'))">Del</button>
+    </div>`).join('');
+}
+
+function addAch(){
+  if(!D.achievements)D.achievements=[];
+  D.achievements.push({id:'ach'+Date.now(),icon:'⭐',number:'0',label:{en:'New Achievement',ar:'إنجاز جديد'}});
+  renderAchs();dirty();
+}
+
+function delAch(id){
+  D.achievements=(D.achievements||[]).filter(a=>a.id!==id);
+  setSiteData(D);renderAchs();updateBadges();toast('Achievement deleted','ok');
+}
+
+function collectAchs(){
+  D.achievements=[];
+  document.querySelectorAll('.ach-row').forEach(row=>{
+    const num=row.querySelector('.ach-num')?.value.trim();
+    if(num)D.achievements.push({
+      id:row.dataset.id||('ach'+Date.now()),
+      icon:row.querySelector('.ach-ic')?.value.trim()||'◆',
+      number:num,
+      label:{en:row.querySelector('.ach-le')?.value.trim(),ar:row.querySelector('.ach-la')?.value.trim()}
+    });
+  });
+}
+
+// ══ WHATSAPP ════════════════════════════════════════════
+function loadWAPanel(){
+  const wa=D.whatsapp||{};
+  document.getElementById('wa-enabled').checked=!!wa.enabled;
+  document.getElementById('wa-number').value=wa.number||'';
+  document.getElementById('wa-color').value=wa.color||'#25D366';
+  document.getElementById('wa-pos').value=wa.position||'bottom-right';
+  document.getElementById('wa-delay').value=wa.show_after_seconds??2;
+  document.getElementById('wa-label-en').value=wa.bubble_text?.en||'Chat with us';
+  document.getElementById('wa-label-ar').value=wa.bubble_text?.ar||'تواصل معنا';
+  document.getElementById('wa-tip-en').value=wa.tooltip?.en||'Typically replies within 1 hour';
+  document.getElementById('wa-tip-ar').value=wa.tooltip?.ar||'يرد عادةً خلال ساعة';
+  document.getElementById('wa-msg-en').value=wa.greeting?.en||"Hello! I'd like to discuss a consulting opportunity.";
+  document.getElementById('wa-msg-ar').value=wa.greeting?.ar||'مرحباً! أود مناقشة فرصة استشارية.';
+  updWAPrev();
+  updWAStatus();
+}
+
+function updWAStatus(){
+  const bar=document.getElementById('wa-status-bar');
+  if(!bar)return;
+  const on=document.getElementById('wa-enabled').checked;
+  bar.style.background=on?'rgba(34,197,94,.08)':'rgba(239,68,68,.08)';
+  bar.style.borderColor=on?'rgba(34,197,94,.3)':'rgba(239,68,68,.3)';
+  bar.style.color=on?'#22c55e':'#ef4444';
+  bar.innerHTML=on
+    ?'<span style="font-size:1rem">●</span> Widget is <strong>ACTIVE</strong> — will appear on the homepage'
+    :'<span style="font-size:1rem">○</span> Widget is <strong>HIDDEN</strong> — not visible on the homepage';
+}
+
+function toggleWAEnabled(){
+  const cb=document.getElementById('wa-enabled');
+  cb.checked=!cb.checked;
+  updWAStatus();updWAPrev();dirty();
+}
+
+function collectWA(){
+  D.whatsapp={
+    enabled:document.getElementById('wa-enabled').checked,
+    number:document.getElementById('wa-number').value.replace(/\D/g,''),
+    color:document.getElementById('wa-color').value,
+    position:document.getElementById('wa-pos').value,
+    show_after_seconds:parseInt(document.getElementById('wa-delay').value)||3,
+    bubble_text:{en:document.getElementById('wa-label-en').value.trim(),ar:document.getElementById('wa-label-ar').value.trim()},
+    tooltip:{en:document.getElementById('wa-tip-en').value.trim(),ar:document.getElementById('wa-tip-ar').value.trim()},
+    greeting:{en:document.getElementById('wa-msg-en').value.trim(),ar:document.getElementById('wa-msg-ar').value.trim()}
+  };
+}
+
+function updWAPrev(){
+  const color=document.getElementById('wa-color')?.value||'#25D366';
+  const label=document.getElementById('wa-label-en')?.value||'Chat with us';
+  const tip=document.getElementById('wa-tip-en')?.value||'Typically replies within 1 hour';
+  const btn=document.getElementById('wa-prev-btn');
+  const tooltip=document.getElementById('wa-prev-tooltip');
+  if(btn){btn.style.background=color;btn.style.boxShadow=`0 4px 16px ${color}55`;document.getElementById('wa-prev-label').textContent=label;}
+  if(tooltip)tooltip.textContent=tip;
+  updWAStatus();
+}
+
+// ══ TYPOGRAPHY ══════════════════════════════════════════
+const TYPO_DEFAULTS = {
+  en:{ heading_font:'Cormorant Garamond', body_font:'DM Sans', heading_size:'clamp(2.6rem, 4.6vw, 4.4rem)', section_size:'clamp(1.9rem, 3.2vw, 2.8rem)', body_size:'0.92rem', nav_size:'0.76rem', heading_weight:'300', body_weight:'300', heading_color:'#f5f3ef', body_color:'#666666', line_height:'1.7' },
+  ar:{ heading_font:'Tajawal', body_font:'Tajawal', heading_size:'clamp(2rem, 4vw, 3.6rem)', section_size:'clamp(1.7rem, 2.8vw, 2.4rem)', body_size:'0.95rem', nav_size:'0.8rem', heading_weight:'300', body_weight:'300', heading_color:'#f5f3ef', body_color:'#666666', line_height:'1.85' },
+  global:{ teal:'#2dd4bf', black:'#0a0a0a', surface:'#161616', border:'#222222', letter_spacing_en:'0.01em', letter_spacing_ar:'0' }
+};
+
+const PRESETS = {
+  elegant:{ en_hf:'Cormorant Garamond', en_bf:'DM Sans',  en_hw:'300', en_bw:'300', ar_hf:'Tajawal', ar_bf:'Tajawal', ar_hw:'300', ar_bw:'300' },
+  modern: { en_hf:'DM Sans',            en_bf:'Inter',     en_hw:'400', en_bw:'300', ar_hf:'Cairo',   ar_bf:'Cairo',   ar_hw:'400', ar_bw:'300' },
+  bold:   { en_hf:'Playfair Display',   en_bf:'Poppins',   en_hw:'400', en_bw:'400', ar_hf:'Cairo',   ar_bf:'Tajawal', ar_hw:'700', ar_bw:'400' },
+  minimal:{ en_hf:'Jost',               en_bf:'Outfit',    en_hw:'300', en_bw:'300', ar_hf:'Almarai', ar_bf:'Almarai', ar_hw:'300', ar_bw:'300' },
+  luxury: { en_hf:'EB Garamond',        en_bf:'Raleway',   en_hw:'300', en_bw:'300', ar_hf:'IBM Plex Sans Arabic', ar_bf:'IBM Plex Sans Arabic', ar_hw:'300', ar_bw:'300' }
+};
+
+const GFONTS = {
+  'Cormorant Garamond':'Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300',
+  'Playfair Display':'Playfair+Display:ital,wght@0,300;0,400;0,700;1,300',
+  'Libre Baskerville':'Libre+Baskerville:ital,wght@0,400;0,700;1,400',
+  'EB Garamond':'EB+Garamond:ital,wght@0,300;0,400;0,500;1,300',
+  'DM Serif Display':'DM+Serif+Display:ital,wght@0,400;1,400',
+  'Lora':'Lora:ital,wght@0,400;0,500;0,700;1,400',
+  'DM Sans':'DM+Sans:wght@300;400;500',
+  'Inter':'Inter:wght@300;400;500;600',
+  'Outfit':'Outfit:wght@300;400;500',
+  'Jost':'Jost:wght@300;400;500',
+  'Raleway':'Raleway:wght@300;400;500;600',
+  'Poppins':'Poppins:wght@300;400;500;600',
+  'Tajawal':'Tajawal:wght@300;400;500;700',
+  'Cairo':'Cairo:wght@300;400;500;700',
+  'Almarai':'Almarai:wght@300;400;700',
+  'Noto Kufi Arabic':'Noto+Kufi+Arabic:wght@300;400;500;700',
+  'IBM Plex Sans Arabic':'IBM+Plex+Sans+Arabic:wght@300;400;500',
+};
+
+function loadTypoPanel() {
+  const t = D.typography || TYPO_DEFAULTS;
+  const en = t.en || TYPO_DEFAULTS.en;
+  const ar = t.ar || TYPO_DEFAULTS.ar;
+  const g  = t.global || TYPO_DEFAULTS.global;
+  const sv = (id,v) => { const el=document.getElementById(id); if(el) el.value=v||''; };
+  sv('en-heading-font',   en.heading_font);
+  sv('en-body-font',      en.body_font);
+  sv('en-heading-size',   en.heading_size);
+  sv('en-section-size',   en.section_size);
+  sv('en-body-size',      en.body_size);
+  sv('en-nav-size',       en.nav_size);
+  sv('en-heading-weight', en.heading_weight);
+  sv('en-body-weight',    en.body_weight);
+  sv('en-line-height',    en.line_height);
+  sv('ar-heading-font',   ar.heading_font);
+  sv('ar-body-font',      ar.body_font);
+  sv('ar-heading-size',   ar.heading_size);
+  sv('ar-section-size',   ar.section_size);
+  sv('ar-body-size',      ar.body_size);
+  sv('ar-nav-size',       ar.nav_size);
+  sv('ar-heading-weight', ar.heading_weight);
+  sv('ar-body-weight',    ar.body_weight);
+  sv('ar-line-height',    ar.line_height);
+  // Colors
+  const setCol = (id,v) => { const el=document.getElementById(id); if(el)el.value=v||''; const hex=document.getElementById(id+'-hex'); if(hex)hex.value=v||''; };
+  setCol('col-teal',    g.teal    || '#2dd4bf');
+  setCol('col-heading', en.heading_color || '#f5f3ef');
+  setCol('col-body',    en.body_color    || '#666666');
+  setCol('col-black',   g.black   || '#0a0a0a');
+  updTypoPrev();
+}
+
+function collectTypo() {
+  const g = id => document.getElementById(id)?.value.trim() || '';
+  D.typography = {
+    en: {
+      heading_font:   g('en-heading-font'),
+      body_font:      g('en-body-font'),
+      heading_size:   g('en-heading-size'),
+      section_size:   g('en-section-size'),
+      body_size:      g('en-body-size'),
+      nav_size:       g('en-nav-size'),
+      heading_weight: g('en-heading-weight'),
+      body_weight:    g('en-body-weight'),
+      heading_color:  g('col-heading') || '#f5f3ef',
+      body_color:     g('col-body')    || '#666666',
+      line_height:    g('en-line-height'),
+    },
+    ar: {
+      heading_font:   g('ar-heading-font'),
+      body_font:      g('ar-body-font'),
+      heading_size:   g('ar-heading-size'),
+      section_size:   g('ar-section-size'),
+      body_size:      g('ar-body-size'),
+      nav_size:       g('ar-nav-size'),
+      heading_weight: g('ar-heading-weight'),
+      body_weight:    g('ar-body-weight'),
+      heading_color:  g('col-heading') || '#f5f3ef',
+      body_color:     g('col-body')    || '#666666',
+      line_height:    g('ar-line-height'),
+    },
+    global: {
+      teal:   g('col-teal')  || '#2dd4bf',
+      black:  g('col-black') || '#0a0a0a',
+      surface: '#161616', border: '#222222',
+      letter_spacing_en: '0.01em',
+      letter_spacing_ar: '0',
+    }
+  };
+}
+
+function updTypoPrev() {
+  const g   = id => document.getElementById(id)?.value || '';
+  const hf  = g('en-heading-font');
+  const bf  = g('en-body-font');
+  const hs  = g('en-heading-size') || 'clamp(2.4rem,4vw,3.8rem)';
+  const ss  = g('en-section-size') || '2rem';
+  const bs  = g('en-body-size')    || '0.9rem';
+  const ns  = g('en-nav-size')     || '0.76rem';
+  const hw  = g('en-heading-weight')|| '300';
+  const bw  = g('en-body-weight')  || '300';
+  const lh  = g('en-line-height')  || '1.7';
+  const tc  = g('col-teal')   || '#2dd4bf';
+  const hc  = g('col-heading')|| '#f5f3ef';
+  const bc  = g('col-body')   || '#666666';
+
+  // Load preview font
+  loadPreviewFont(hf); loadPreviewFont(bf);
+
+  const p = document.getElementById('typo-preview');
+  if (!p) return;
+  p.style.background = g('col-black') || '#0a0a0a';
+
+  const h1  = document.getElementById('tp-h1');
+  const h2  = document.getElementById('tp-h2');
+  const bod = document.getElementById('tp-body');
+  const nav = document.getElementById('tp-nav');
+
+  if (h1)  { h1.style.fontFamily = `'${hf}',Georgia,serif`; h1.style.fontSize = 'clamp(1.8rem,3vw,2.4rem)'; h1.style.fontWeight = hw; h1.style.color = hc; }
+  if (h2)  { h2.style.fontFamily = `'${hf}',Georgia,serif`; h2.style.fontSize = '1.4rem'; h2.style.fontWeight = hw; h2.style.color = hc; }
+  if (bod) { bod.style.fontFamily = `'${bf}',sans-serif`; bod.style.fontSize = bs; bod.style.fontWeight = bw; bod.style.color = bc; bod.style.lineHeight = lh; }
+  if (nav) { nav.style.fontFamily = `'${bf}',sans-serif`; nav.style.fontSize = ns; nav.style.color = tc; }
+}
+
+function loadPreviewFont(name) {
+  if (!name || !GFONTS[name]) return;
+  if (document.querySelector(`link[data-font="${name}"]`)) return;
+  const l = document.createElement('link'); l.rel='stylesheet'; l.dataset.font=name;
+  l.href=`https://fonts.googleapis.com/css2?family=${GFONTS[name]}&display=swap`;
+  document.head.appendChild(l);
+}
+
+function syncColor(key) {
+  const hex = document.getElementById('col-'+key+'-hex')?.value;
+  const picker = document.getElementById('col-'+key);
+  if (hex && hex.match(/^#[0-9a-fA-F]{6}$/) && picker) { picker.value = hex; updTypoPrev(); dirty(); }
+}
+
+function applyPreset(name) {
+  const p = PRESETS[name]; if (!p) return;
+  const sv = (id,v) => { const el=document.getElementById(id); if(el) el.value=v; };
+  sv('en-heading-font',   p.en_hf); sv('en-body-font',      p.en_bf);
+  sv('en-heading-weight', p.en_hw); sv('en-body-weight',    p.en_bw);
+  sv('ar-heading-font',   p.ar_hf); sv('ar-body-font',      p.ar_bf);
+  sv('ar-heading-weight', p.ar_hw); sv('ar-body-weight',    p.ar_bw);
+  updTypoPrev(); dirty();
+  toast(`Preset "${name}" applied — click Save to publish.`, 'ok');
+}
+
+function resetTypo() {
+  D.typography = JSON.parse(JSON.stringify(TYPO_DEFAULTS));
+  loadTypoPanel();
+  toast('Typography reset to defaults.', 'ok');
+  dirty();
+}
+
+function saveAndDownload(){
+  saveAll();
+  setTimeout(()=>{ downloadJS(); }, 300);
+}
+
+// ══ EXPORT ═══════════════════════════════════════════════
+function renderExport(){document.getElementById('json-box').textContent=JSON.stringify(D,null,2).substring(0,3000)+'...';}
+function downloadJS(){
+  // Always collect all panels first
+  if(document.getElementById('en-heading-font')?.value) collectTypo();
+  const data = D || getSiteData();
+  const content = `// YASER AL-SHKRE — Site Data
+// Auto-generated: ${new Date().toLocaleString()}
+// Upload this file to your server to apply all changes.
+
+const SITE_DATA_KEY = '${SITE_DATA_KEY}';
+
+const DEFAULT_SITE = ${JSON.stringify(data, null, 2)};
+
+function getSiteData() {
+  try {
+    const s = localStorage.getItem(SITE_DATA_KEY);
+    if (s) {
+      const d = JSON.parse(s);
+      if (d && d._version) return d;
+    }
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_SITE));
+}
+
+function setSiteData(data) {
+  try {
+    data._updated = new Date().toISOString();
+    localStorage.setItem(SITE_DATA_KEY, JSON.stringify(data));
+    return true;
+  } catch(e) { return false; }
+}
+
+function injectPlaceholders(d) {
+  const PH_HERO = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80&fit=crop';
+  const PH_CONS = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80&fit=crop';
+  const PH_CASES = [
+    'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=900&q=80&fit=crop',
+  ];
+  const PH_SVCS = [
+    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80&fit=crop',
+  ];
+  if (!d.hero.image)  d.hero.image  = PH_HERO;
+  if (!d.about.photo) d.about.photo = PH_CONS;
+  (d.cases    || []).forEach((c,i) => { if (!c.image) c.image = PH_CASES[i % PH_CASES.length]; });
+  (d.services || []).forEach((s,i) => { if (!s.image) s.image = PH_SVCS[i % PH_SVCS.length]; });
+  return d;
+}
+`;
+  dl(content, 'site-data.js', 'text/javascript');
+  toast('site-data.js downloaded! Upload it to your server to publish all changes.', 'ok');
+}
+function downloadJSON(){dl(JSON.stringify(D,null,2),'cases.json','application/json');toast('cases.json downloaded!','ok');}
+function dl(content,name,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+
+// ══ DRAWER / CONFIRM / TOAST ══════════════════════════════
+function openDr(id){document.getElementById(id+'-ov').classList.add('open');document.getElementById(id+'-dr').classList.add('open');document.body.style.overflow='hidden';}
+function closeDr(id){document.getElementById(id+'-ov').classList.remove('open');document.getElementById(id+'-dr').classList.remove('open');document.body.style.overflow='';}
+function conf(title,text,cb){document.getElementById('conf-t').textContent=title;document.getElementById('conf-s').textContent=text;document.getElementById('conf-ok').onclick=()=>{cb();closeConf();};document.getElementById('conf-ov').classList.add('open');}
+function closeConf(){document.getElementById('conf-ov').classList.remove('open');}
+function toast(msg,type='ok'){const icons={ok:'✓',err:'✕',warn:'⚠'};const colors={ok:'var(--teal)',err:'var(--red)',warn:'var(--amber)'};const el=document.createElement('div');el.className=`toast ${type}`;el.innerHTML=`<span style="color:${colors[type]}">${icons[type]}</span>${msg}`;document.getElementById('tw').appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300);},3000);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['case','svc','testi'].forEach(d=>closeDr(d));closeConf();}});
+</script>
+</body>
+</html>
