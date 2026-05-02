@@ -159,3 +159,29 @@ if (document.readyState === 'loading') {
 } else {
   applyTheme();
 }
+
+// ═══════════════════════════════════════════════════
+//  DARK / LIGHT MODE
+// ═══════════════════════════════════════════════════
+function applyThemeMode() {
+  const d    = (typeof getSiteData === 'function') ? getSiteData() : DEFAULT_SITE;
+  const mode = d.theme_mode || 'dark';
+  const root = document.documentElement;
+
+  if (mode === 'light') {
+    root.setAttribute('data-theme', 'light');
+  } else {
+    root.removeAttribute('data-theme');
+  }
+}
+
+// Apply mode alongside theme
+const _origApply = applyTheme;
+function applyTheme() { _origApply(); applyThemeMode(); }
+
+// Re-apply on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyThemeMode);
+} else {
+  applyThemeMode();
+}

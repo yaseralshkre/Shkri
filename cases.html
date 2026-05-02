@@ -73,11 +73,31 @@ html[lang="ar"] .modal-title{font-family:var(--ar);font-size:1.5rem}
 footer{background:var(--black);padding:2.5rem 4rem;display:flex;align-items:center;justify-content:space-between;border-top:.5px solid var(--g2)}
 .footer-copy{font-size:.68rem;color:var(--g3)}.footer-logo img{height:26px}
 @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}.page-hero,.cases-wrap,.filter-bar{padding-left:1.5rem;padding-right:1.5rem}.cases-grid{grid-template-columns:1fr}footer{flex-direction:column;gap:1rem;padding:2rem 1.5rem}.modal-ov{padding:0;align-items:flex-end}.modal{max-height:92vh}.modal-body{padding:1.5rem}}
+/* LIGHT THEME */
+html[data-theme="light"] body{background:#f5f3ef;color:#333}
+html[data-theme="light"] nav{background:rgba(245,243,239,.95);border-bottom-color:#d8d5d0}
+html[data-theme="light"] h1,html[data-theme="light"] h2,html[data-theme="light"] h3{color:#0a0a0a !important}
+html[data-theme="light"] .svc-card-sub,html[data-theme="light"] .svc-card-desc,html[data-theme="light"] .ps-text,html[data-theme="light"] .cta-sub,html[data-theme="light"] .modal-svc-desc{color:#555 !important}
+html[data-theme="light"] .nav-links a{color:#555}
+html[data-theme="light"] .svc-card,html[data-theme="light"] .modal{background:#f5f3ef;border-color:#d0cdc8}
+html[data-theme="light"] .process-strip{background:#eeece8}
+html[data-theme="light"] .page-hero{background:#eeece8}
+html[data-theme="light"] .filter-bar{background:#f5f3ef;border-bottom-color:#d8d5d0}
+html[data-theme="light"] .fb{border-color:#d0cdc8;color:#777}
+html[data-theme="light"] footer{background:#eeece8;border-top-color:#d0cdc8}
+html[data-theme="light"] .footer-copy{color:#888}
+html[data-theme="light"] .modal-hdr{background:#eeece8}
+html[data-theme="light"] .modal-item{border-color:#d0cdc8}
+html[data-theme="light"] .cc-body{background:#f5f3ef}
+html[data-theme="light"] .cc-title{color:#0a0a0a}
+html[data-theme="light"] .cc-sum{color:#555}
+html[data-theme="light"] .cases-grid{background:#d8d5d0}
+
 </style>
 </head>
 <body>
 <nav>
-  <a href="index.html" class="nav-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></a>
+  <a href="index.html" class="nav-logo" id="nav-logo-link"><img id="nav-logo-img" src="Yaser_Alshkre__1_.png" alt="Yaser Al-Shkre" style="height:30px;width:auto"></a>
   <ul class="nav-links">
     <li><a href="index.html#value" class="en">Approach</a><a href="index.html#value" class="ar">المنهجية</a></li>
     <li><a href="index.html#services" class="en">Services</a><a href="index.html#services" class="ar">الخدمات</a></li>
@@ -128,7 +148,7 @@ footer{background:var(--black);padding:2.5rem 4rem;display:flex;align-items:cent
 <footer>
   <div class="footer-copy en">© 2025 Yaser Ahmed Al-Shkre. All rights reserved.</div>
   <div class="footer-copy ar">© 2025 ياسر أحمد الشكري. جميع الحقوق محفوظة.</div>
-  <div class="footer-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></div>
+  <div class="footer-logo"><img id="footer-logo-img" src="Yaser_Alshkre__1_.png" alt="Yaser Al-Shkre" style="height:26px"></div>
 </footer>
 
 <script>
@@ -145,6 +165,14 @@ function toggleLang() {
 
 function init() {
   const d = getSiteData();
+  // Apply logo
+  const _logo = d.logo || {};
+  const _li = document.getElementById('nav-logo-link'); if(_li){ _li.href=_logo.link||'index.html'; _li.onclick=null; }
+  const _img = document.getElementById('nav-logo-img'); if(_img && _logo.image){_img.src=_logo.image;_img.style.height=(_logo.height||'30')+'px';}
+  const _fi = document.getElementById('footer-logo-img'); if(_fi && _logo.image) _fi.src=_logo.image;
+  // Apply dark/light mode
+  if (d.theme_mode === 'light') document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
   allCases = d.cases || [];
   buildFilters();
   renderCases(allCases);

@@ -71,6 +71,7 @@ button{cursor:pointer}a{color:inherit;text-decoration:none}
 .btn-outline{background:transparent;border:.5px solid var(--b2);color:var(--t2)}.btn-outline:hover{border-color:var(--b3);color:var(--t1)}
 .btn-danger{background:var(--red2);color:var(--red);border:.5px solid transparent}.btn-danger:hover{background:var(--red);color:#fff}
 .btn-amber{background:var(--amber2);color:var(--amber);border:.5px solid transparent}.btn-amber:hover{background:var(--amber);color:#000}
+.btn-green{background:rgba(34,197,94,.1);color:#22c55e;border:.5px solid transparent}.btn-green:hover{background:#22c55e;color:#000}
 .btn-sm{padding:.26rem .62rem;font-size:.66rem}
 .btn-xs{padding:.16rem .46rem;font-size:.62rem}
 
@@ -236,6 +237,9 @@ button{cursor:pointer}a{color:inherit;text-decoration:none}
 
 <div class="sb">
   <button class="sb-item" onclick="nav('typography',this)"><span class="sb-ic">Aa</span> Typography</button>
+  <button class="sb-item" onclick="nav('logo',this)"><span class="sb-ic">◈</span> Logo</button>
+  <button class="sb-item" onclick="nav('thememode',this)"><span class="sb-ic">◑</span> Dark / Light</button>
+  <button class="sb-item" onclick="nav('testimonials-mgr',this)"><span class="sb-ic">✦</span> Testimonials</button>
   <div class="sb-sec">Pages</div>
   <button class="sb-item act" onclick="nav('dash',this)"><span class="sb-ic">◈</span> Dashboard</button>
   <button class="sb-item" onclick="nav('hero',this)"><span class="sb-ic">⌂</span> Home / Hero</button>
@@ -452,6 +456,168 @@ button{cursor:pointer}a{color:inherit;text-decoration:none}
       <button class="btn btn-outline btn-sm" onclick="applyPreset('luxury')">◈ Luxury Dark</button>
     </div>
     <div style="font-size:.68rem;color:var(--t3);margin-top:.6rem">Presets change fonts, weights and sizes. Colors remain unchanged.</div>
+  </div>
+</div>
+
+<!-- LOGO MANAGER -->
+<div class="panel" id="panel-logo">
+  <div class="ph">
+    <div class="ph-left"><h1>Logo</h1><p>Upload your logo and control its size. Clicking it takes visitors to the homepage.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="saveAll()">Save Changes</button></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:1rem;align-items:start">
+    <div>
+      <div class="card"><div class="ct">Logo Image</div>
+        <!-- Upload area -->
+        <div class="img-preview-section" id="logo-preview-section">
+          <img id="logo-prev-img" src="Yaser_Alshkre__1_.png" alt="Logo"
+               style="height:80px;width:auto;object-fit:contain;padding:1.5rem;display:block;background:var(--bg)">
+          <div class="iph" id="logo-prev-ph" style="height:80px;display:none">
+            <div class="iph-ic">◈</div><div class="iph-txt">No logo uploaded</div>
+          </div>
+        </div>
+        <div class="img-section-tools" style="flex-direction:column;gap:.5rem;align-items:stretch">
+          <div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:.2rem">Upload new logo (PNG with transparent background recommended)</div>
+          <input type="file" accept="image/*" onchange="uploadLogo(event)" style="font-size:.7rem;color:var(--t2)">
+          <div style="display:flex;gap:.5rem">
+            <input type="text" class="img-url-in" id="logo-url-in" placeholder="…or paste image URL / file path" style="flex:1" oninput="handleLogoUrl(this.value)">
+            <button class="btn btn-outline btn-xs" onclick="resetLogo()">↺ Reset Default</button>
+          </div>
+        </div>
+        <input type="hidden" id="logo-src">
+      </div>
+
+      <div class="card" style="margin-top:.8rem"><div class="ct">Logo Settings</div>
+        <div class="fg fg-2">
+          <div class="field">
+            <label class="fl">Height (px)</label>
+            <div style="display:flex;align-items:center;gap:.5rem">
+              <input class="fi" id="logo-height" type="number" min="16" max="80" value="30" oninput="prevLogoSize();dirty()" style="width:80px">
+              <span style="font-size:.72rem;color:var(--t2)">px</span>
+              <input type="range" id="logo-height-range" min="16" max="80" value="30" oninput="document.getElementById('logo-height').value=this.value;prevLogoSize();dirty()" style="flex:1;accent-color:var(--teal)">
+            </div>
+          </div>
+          <div class="field">
+            <label class="fl">Click Destination</label>
+            <select class="fs" id="logo-link" oninput="dirty()">
+              <option value="index.html">Home Page (index.html)</option>
+              <option value="#hero">Home Page — top anchor</option>
+              <option value="/">Root URL</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg fg-2" style="margin-top:.6rem">
+          <div class="field">
+            <label class="fl">Alt Text <span class="lb">EN</span></label>
+            <input class="fi" id="logo-alt-en" value="Yaser Al-Shkre" oninput="dirty()">
+          </div>
+          <div class="field">
+            <label class="fl">Alt Text <span class="lb ar">AR</span></label>
+            <input class="fi" id="logo-alt-ar" value="ياسر الشكري" dir="auto" oninput="dirty()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live preview -->
+    <div>
+      <div class="card"><div class="ct">Live Preview</div>
+        <!-- Nav preview -->
+        <div style="background:rgba(10,10,10,.92);border:.5px solid var(--b1);padding:.9rem 1.2rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+          <img id="logo-nav-prev" src="Yaser_Alshkre__1_.png" alt="Logo" style="height:30px;width:auto;object-fit:contain">
+          <div style="display:flex;gap:1rem">
+            <div style="width:40px;height:4px;background:var(--b2);border-radius:2px"></div>
+            <div style="width:40px;height:4px;background:var(--b2);border-radius:2px"></div>
+            <div style="width:40px;height:4px;background:var(--b2);border-radius:2px"></div>
+          </div>
+        </div>
+        <div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:.5rem">Nav Bar Preview</div>
+
+        <!-- Footer preview -->
+        <div style="background:var(--bg);border:.5px solid var(--b1);padding:.9rem 1.2rem;display:flex;align-items:center;justify-content:space-between;margin-top:1rem">
+          <div style="font-size:.65rem;color:var(--t3)">© 2025 Yaser Al-Shkre</div>
+          <img id="logo-footer-prev" src="Yaser_Alshkre__1_.png" alt="Logo" style="height:24px;width:auto;object-fit:contain">
+        </div>
+        <div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-top:.5rem">Footer Preview</div>
+
+        <div style="margin-top:1.2rem;font-size:.7rem;color:var(--t2);line-height:1.7;padding:.7rem;background:var(--teal2);border:.5px solid rgba(45,212,191,.2)">
+          ◈ Click on the logo in the live website always goes to <strong style="color:var(--teal)">Home Page</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DARK / LIGHT THEME MODE -->
+<div class="panel" id="panel-thememode">
+  <div class="ph"><div class="ph-left"><h1>Dark / Light Mode</h1><p>Switch the website theme across all pages.</p></div>
+    <div class="ph-right"><button class="btn btn-teal btn-sm" onclick="saveAll()">Save & Apply</button></div>
+  </div>
+  <!-- Visual toggle -->
+  <div class="card">
+    <div class="ct">Website Theme</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem">
+      <!-- Dark option -->
+      <div id="opt-dark" onclick="selectThemeMode('dark')" style="border:.5px solid var(--teal);background:var(--teal2);padding:1.5rem;cursor:pointer;transition:all .2s;position:relative">
+        <div style="background:#0a0a0a;border:.5px solid #222;padding:1rem;margin-bottom:.8rem">
+          <div style="width:60%;height:6px;background:#2dd4bf;margin-bottom:.5rem;opacity:.8"></div>
+          <div style="width:90%;height:4px;background:#333;margin-bottom:.3rem"></div>
+          <div style="width:75%;height:4px;background:#333;margin-bottom:.3rem"></div>
+          <div style="width:85%;height:4px;background:#333"></div>
+        </div>
+        <div style="font-size:.78rem;font-weight:500;color:var(--t1)">🌙 Dark Mode</div>
+        <div style="font-size:.68rem;color:var(--t2);margin-top:.2rem">Black background, white text</div>
+        <div id="check-dark" style="position:absolute;top:.7rem;right:.7rem;color:var(--teal);font-size:1.1rem">✓</div>
+      </div>
+      <!-- Light option -->
+      <div id="opt-light" onclick="selectThemeMode('light')" style="border:.5px solid var(--b1);background:var(--s2);padding:1.5rem;cursor:pointer;transition:all .2s;position:relative">
+        <div style="background:#f5f3ef;border:.5px solid #d8d5d0;padding:1rem;margin-bottom:.8rem">
+          <div style="width:60%;height:6px;background:#2dd4bf;margin-bottom:.5rem;opacity:.8"></div>
+          <div style="width:90%;height:4px;background:#ccc;margin-bottom:.3rem"></div>
+          <div style="width:75%;height:4px;background:#ccc;margin-bottom:.3rem"></div>
+          <div style="width:85%;height:4px;background:#ccc"></div>
+        </div>
+        <div style="font-size:.78rem;font-weight:500;color:var(--t1)">☀️ Light Mode</div>
+        <div style="font-size:.68rem;color:var(--t2);margin-top:.2rem">White background, dark text</div>
+        <div id="check-light" style="position:absolute;top:.7rem;right:.7rem;color:var(--teal);font-size:1.1rem;display:none">✓</div>
+      </div>
+    </div>
+    <input type="hidden" id="theme-mode-val" value="dark">
+    <div style="font-size:.73rem;color:var(--t2);padding:.7rem;background:rgba(45,212,191,.06);border:.5px solid rgba(45,212,191,.2)">
+      After saving, click <strong style="color:var(--amber)">↓ Publish</strong> in the top bar to apply the theme to your live website.
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS MANAGER -->
+<div class="panel" id="panel-testimonials-mgr">
+  <div class="ph"><div class="ph-left"><h1>Testimonials</h1><p>Add, hide or show client testimonials on the homepage.</p></div>
+    <div class="ph-right">
+      <button class="btn btn-teal btn-sm" onclick="openTestiDr()">+ Add Testimonial</button>
+    </div>
+  </div>
+  <!-- Section visibility toggle -->
+  <div class="card" style="margin-bottom:.8rem">
+    <div class="ct">Section Visibility</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem 0">
+      <div>
+        <div style="font-size:.82rem;color:var(--t1)">Show Testimonials Section on Homepage</div>
+        <div style="font-size:.7rem;color:var(--t3);margin-top:.15rem">When hidden, the entire section is removed from the page</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.8rem">
+        <span id="testi-vis-lbl" style="font-size:.72rem;color:var(--teal)">Visible</span>
+        <button id="testi-vis-btn" onclick="toggleTestiVis()" class="btn btn-sm btn-teal">Hide Section</button>
+      </div>
+    </div>
+  </div>
+  <!-- Testimonials list -->
+  <div class="card">
+    <div class="ct">Testimonials <span style="font-size:.58rem;color:var(--t3);letter-spacing:0;text-transform:none">— click to show/hide individually</span></div>
+    <div id="testi-mgr-list"></div>
+    <div style="margin-top:.6rem">
+      <button class="btn btn-outline btn-sm" onclick="openTestiDr()">+ Add New Testimonial</button>
+    </div>
   </div>
 </div>
 
@@ -722,9 +888,16 @@ button{cursor:pointer}a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="card"><div class="ct">Data</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem 0">
-        <div><div style="font-size:.76rem">Reset to Defaults</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Restore original content</div></div>
-        <button class="btn btn-danger btn-sm" onclick="conf('Reset all data?','All custom content will be deleted.',()=>{localStorage.removeItem(SITE_DATA_KEY);location.reload();})">Reset</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:.5px solid var(--b1)">
+        <div>
+          <div style="font-size:.76rem">Clear Browser Cache</div>
+          <div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">If content disappeared — click this to reload from defaults</div>
+        </div>
+        <button class="btn btn-amber btn-sm" onclick="clearAndReload()">↺ Clear & Reload</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0">
+        <div><div style="font-size:.76rem">Reset to Defaults</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Delete all custom content and restore original</div></div>
+        <button class="btn btn-danger btn-sm" onclick="conf('Reset all data?','All custom content will be permanently deleted.',()=>{localStorage.clear();location.reload();})">Reset All</button>
       </div>
     </div>
   </div>
@@ -944,6 +1117,9 @@ function nav(id,btn){
   if(id==='inbox') renderInbox();
   if(id==='typography') loadTypoPanel();
   if(id==='whatsapp') loadWAPanel();
+  if(id==='logo') loadLogoPanel();
+  if(id==='testimonials-mgr') loadTestiMgr();
+  if(id==='achievements') renderAchs();
   if(id==='export') renderExport();
 }
 
@@ -959,8 +1135,12 @@ function saveAll(){
   if(document.getElementById('panel-about').classList.contains('act')) collectAbout();
   if(document.getElementById('panel-contact').classList.contains('act')) collectContact();
   if(document.getElementById('panel-whatsapp').classList.contains('act')) collectWA();
-  // Collect typography if the panel has been opened (fields populated)
+  if(document.getElementById('panel-achievements').classList.contains('act')) collectAchs();
   if(document.getElementById('en-heading-font')?.value) collectTypo();
+  // Save theme mode if panel was opened
+  if(document.getElementById('logo-src')?.value) collectLogo();
+  const tmv = document.getElementById('theme-mode-val');
+  if(tmv?.value) D.theme_mode = tmv.value;
   setSiteData(D);
   clean(); toast('All changes saved!','ok'); updateBadges();
   loadQuickFields();
@@ -1299,6 +1479,151 @@ function updWAPrev(){
   updWAStatus();
 }
 
+// ══ LOGO MANAGER ════════════════════════════════════════
+function loadLogoPanel(){
+  const logo = D.logo || {};
+  const src  = logo.image || 'Yaser_Alshkre__1_.png';
+  setLogoPrev(src);
+  document.getElementById('logo-src').value = src;
+  document.getElementById('logo-url-in').value = src.startsWith('data:') ? '(uploaded file)' : src;
+  document.getElementById('logo-height').value = logo.height || '30';
+  document.getElementById('logo-height-range').value = logo.height || '30';
+  document.getElementById('logo-link').value = logo.link || 'index.html';
+  document.getElementById('logo-alt-en').value = logo.alt_en || 'Yaser Al-Shkre';
+  document.getElementById('logo-alt-ar').value = logo.alt_ar || 'ياسر الشكري';
+  prevLogoSize();
+}
+
+function uploadLogo(e){
+  const file = e.target.files[0]; if(!file) return;
+  if(file.size > 2*1024*1024){ toast('Logo max 2MB','err'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    setLogoPrev(ev.target.result);
+    document.getElementById('logo-src').value = ev.target.result;
+    document.getElementById('logo-url-in').value = '(uploaded file)';
+    dirty();
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleLogoUrl(url){
+  if(url && url.length > 5){
+    setLogoPrev(url);
+    document.getElementById('logo-src').value = url;
+    dirty();
+  }
+}
+
+function setLogoPrev(src){
+  ['logo-prev-img','logo-nav-prev','logo-footer-prev'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){ el.src=src; el.style.display='block'; }
+  });
+  const ph = document.getElementById('logo-prev-ph');
+  if(ph) ph.style.display='none';
+}
+
+function prevLogoSize(){
+  const h = document.getElementById('logo-height')?.value || '30';
+  document.getElementById('logo-height-range').value = h;
+  const navImg = document.getElementById('logo-nav-prev');
+  if(navImg) navImg.style.height = h+'px';
+}
+
+function resetLogo(){
+  const def = 'Yaser_Alshkre__1_.png';
+  setLogoPrev(def);
+  document.getElementById('logo-src').value = def;
+  document.getElementById('logo-url-in').value = def;
+  document.getElementById('logo-height').value = '30';
+  document.getElementById('logo-height-range').value = '30';
+  prevLogoSize(); dirty();
+  toast('Logo reset to default.','ok');
+}
+
+function collectLogo(){
+  D.logo = {
+    image:  document.getElementById('logo-src')?.value   || 'Yaser_Alshkre__1_.png',
+    height: document.getElementById('logo-height')?.value || '30',
+    link:   document.getElementById('logo-link')?.value   || 'index.html',
+    alt_en: document.getElementById('logo-alt-en')?.value || 'Yaser Al-Shkre',
+    alt_ar: document.getElementById('logo-alt-ar')?.value || 'ياسر الشكري',
+  };
+}
+
+// ══ DARK / LIGHT MODE ═══════════════════════════════════
+function loadThemeMode(){
+  const mode = D.theme_mode || 'dark';
+  selectThemeMode(mode, false);
+}
+
+function selectThemeMode(mode, markChange){
+  D.theme_mode = mode;
+  document.getElementById('theme-mode-val').value = mode;
+  const optD=document.getElementById('opt-dark'), optL=document.getElementById('opt-light');
+  const ckD=document.getElementById('check-dark'), ckL=document.getElementById('check-light');
+  if(mode==='light'){
+    if(optD){optD.style.border='.5px solid var(--b1)';optD.style.background='var(--s2)';}
+    if(optL){optL.style.border='.5px solid var(--teal)';optL.style.background='var(--teal2)';}
+    if(ckD)ckD.style.display='none'; if(ckL)ckL.style.display='block';
+  } else {
+    if(optD){optD.style.border='.5px solid var(--teal)';optD.style.background='var(--teal2)';}
+    if(optL){optL.style.border='.5px solid var(--b1)';optL.style.background='var(--s2)';}
+    if(ckD)ckD.style.display='block'; if(ckL)ckL.style.display='none';
+  }
+  if(markChange!==false) dirty();
+}
+
+// ══ TESTIMONIALS MANAGER ════════════════════════════════
+function loadTestiMgr(){
+  const vis=D.testimonials_visible!==false;
+  const lbl=document.getElementById('testi-vis-lbl');
+  const btn=document.getElementById('testi-vis-btn');
+  if(lbl){lbl.textContent=vis?'Visible':'Hidden';lbl.style.color=vis?'var(--teal)':'var(--red)';}
+  if(btn){btn.textContent=vis?'Hide Section':'Show Section';btn.className=vis?'btn btn-sm btn-danger':'btn btn-sm btn-green';}
+  renderTestiMgr();
+}
+
+function toggleTestiVis(){
+  D.testimonials_visible=D.testimonials_visible===false?true:false;
+  setSiteData(D); loadTestiMgr(); dirty();
+  toast(D.testimonials_visible?'Testimonials section shown.':'Testimonials section hidden.','ok');
+}
+
+function renderTestiMgr(){
+  const testis=D.about?.testimonials||[];
+  const el=document.getElementById('testi-mgr-list');
+  if(!el) return;
+  if(!testis.length){el.innerHTML='<div class="empty"><div class="empty-ic">✦</div><div class="empty-t">No testimonials yet</div></div>';return;}
+  el.innerHTML=testis.map((t,i)=>{
+    const isVis=t.visible!==false;
+    return `<div class="sort-item" style="align-items:flex-start;border-left:3px solid ${isVis?'var(--teal)':'var(--b2)'}">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.3rem">
+          <span style="font-size:.82rem;font-weight:500;color:var(--t1)">${t.name||'—'}</span>
+          <span style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:${isVis?'var(--teal)':'var(--t3)'}">${isVis?'Visible':'Hidden'}</span>
+        </div>
+        <div style="font-size:.68rem;color:var(--teal);margin-bottom:.22rem">${t.role||''}</div>
+        <div style="font-size:.74rem;color:var(--t2);line-height:1.6;font-style:italic">"${(t.quote?.en||'').substring(0,110)}${(t.quote?.en||'').length>110?'…':''}"</div>
+      </div>
+      <div class="td-acts">
+        <button class="btn ${isVis?'btn-outline':'btn-green'} btn-xs" onclick="toggleTestiItemVis('${t.id}')">${isVis?'Hide':'Show'}</button>
+        <button class="btn btn-outline btn-xs" onclick="editTesti('${t.id}')">Edit</button>
+        <button class="btn btn-danger btn-xs" onclick="delTesti('${t.id}')">Del</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleTestiItemVis(id){
+  if(!D.about.testimonials) return;
+  const t=D.about.testimonials.find(x=>x.id===id); if(!t) return;
+  t.visible=t.visible===false?true:false;
+  setSiteData(D); renderTestiMgr();
+  toast(t.visible?'Testimonial shown.':'Testimonial hidden.','ok');
+}
+
 // ══ TYPOGRAPHY ══════════════════════════════════════════
 const TYPO_DEFAULTS = {
   en:{ heading_font:'Cormorant Garamond', body_font:'DM Sans', heading_size:'clamp(2.6rem, 4.6vw, 4.4rem)', section_size:'clamp(1.9rem, 3.2vw, 2.8rem)', body_size:'0.92rem', nav_size:'0.76rem', heading_weight:'300', body_weight:'300', heading_color:'#f5f3ef', body_color:'#666666', line_height:'1.7' },
@@ -1471,6 +1796,12 @@ function resetTypo() {
   dirty();
 }
 
+function clearAndReload() {
+  localStorage.removeItem(SITE_DATA_KEY);
+  toast('Cache cleared — reloading...', 'ok');
+  setTimeout(() => location.reload(), 800);
+}
+
 function saveAndDownload(){
   saveAll();
   setTimeout(()=>{ downloadJS(); }, 300);
@@ -1495,7 +1826,21 @@ function getSiteData() {
     const s = localStorage.getItem(SITE_DATA_KEY);
     if (s) {
       const d = JSON.parse(s);
-      if (d && d._version) return d;
+      if (d && typeof d === 'object') {
+        const merged = JSON.parse(JSON.stringify(DEFAULT_SITE));
+        if (d.hero      && d.hero.headline)   merged.hero      = d.hero;
+        if (d.services  && d.services.length) merged.services  = d.services;
+        if (d.cases     && d.cases.length)    merged.cases     = d.cases;
+        if (d.about     && d.about.name)      merged.about     = d.about;
+        if (d.contact   && d.contact.email !== undefined) merged.contact = d.contact;
+        if (d.logo)         merged.logo         = d.logo;
+        if (d.whatsapp)     merged.whatsapp     = d.whatsapp;
+        if (d.achievements && d.achievements.length) merged.achievements = d.achievements;
+        if (d.typography)   merged.typography   = d.typography;
+        if (d.theme_mode)   merged.theme_mode   = d.theme_mode;
+        if (d.testimonials_visible !== undefined) merged.testimonials_visible = d.testimonials_visible;
+        return merged;
+      }
     }
   } catch(e) {}
   return JSON.parse(JSON.stringify(DEFAULT_SITE));

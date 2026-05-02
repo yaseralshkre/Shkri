@@ -320,6 +320,58 @@ html[lang="ar"] .impact-num, html[lang="ar"] .val-num {
   font-family: var(--serif);
 }
 
+/* ── LIGHT THEME ── */
+html[data-theme="light"] body          { background:#f5f3ef; color:#333; }
+html[data-theme="light"] nav           { background:rgba(245,243,239,.95); border-bottom-color:#d8d5d0; }
+html[data-theme="light"] .hero-overlay { background:linear-gradient(135deg,rgba(245,243,239,.9) 0%,rgba(245,243,239,.55) 55%,rgba(245,243,239,.85) 100%); }
+html[data-theme="light"] .hero-h1,
+html[data-theme="light"] .sec-title,
+html[data-theme="light"] .about-name,
+html[data-theme="light"] .contact-big,
+html[data-theme="light"] .svc-title,
+html[data-theme="light"] .case-headline,
+html[data-theme="light"] .testi-name   { color:#0a0a0a !important; }
+html[data-theme="light"] .hero-sub,
+html[data-theme="light"] .services-desc,
+html[data-theme="light"] .about-bio,
+html[data-theme="light"] .step-text,
+html[data-theme="light"] .val-text,
+html[data-theme="light"] .testi-text,
+html[data-theme="light"] .ach-label,
+html[data-theme="light"] .contact-note,
+html[data-theme="light"] .pillar-txt,
+html[data-theme="light"] .qual-item span { color:#555 !important; }
+html[data-theme="light"] .nav-links a   { color:#555; }
+html[data-theme="light"] .lang-btn      { border-color:#ccc; color:#777; }
+html[data-theme="light"] .stat-lbl      { color:#777; }
+html[data-theme="light"] .hero-stats .stat-num { color:#0a0a0a; }
+html[data-theme="light"] .hero-grid    { background-image:linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px); }
+html[data-theme="light"] #value,
+html[data-theme="light"] #case,
+html[data-theme="light"] #about        { background:#eeece8; }
+html[data-theme="light"] #services,
+html[data-theme="light"] #testimonials,
+html[data-theme="light"] #contact,
+html[data-theme="light"] #achievements { background:#f5f3ef; }
+html[data-theme="light"] .val-card,
+html[data-theme="light"] .step-block,
+html[data-theme="light"] .testi-card,
+html[data-theme="light"] .ach-card     { background:#f5f3ef; border-color:#d0cdc8; }
+html[data-theme="light"] .svc-item     { background:#f5f3ef; border-color:#d0cdc8; }
+html[data-theme="light"] .svc-content  { background:#f5f3ef; }
+html[data-theme="light"] .val-num      { color:#d8d5d0; }
+html[data-theme="light"] .f-input,
+html[data-theme="light"] .f-textarea   { background:#eee; border-color:#ccc; color:#111; }
+html[data-theme="light"] footer        { background:#eeece8; border-top-color:#d0cdc8; }
+html[data-theme="light"] .footer-copy  { color:#888; }
+html[data-theme="light"] .about-corner { background:rgba(245,243,239,.92); }
+html[data-theme="light"] .pillars-box  { border-color:#d0cdc8; }
+html[data-theme="light"] .case-impacts { border-top-color:#d0cdc8; }
+html[data-theme="light"] .wa-tooltip   { box-shadow:0 4px 20px rgba(0,0,0,.12); }
+
+/* ── TESTIMONIALS SECTION TOGGLE ── */
+#testimonials.testi-hidden { display:none !important; }
+
 /* FOOTER */
 footer { background: var(--black); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; border-top: .5px solid var(--g2); }
 .footer-copy { font-size: .68rem; color: var(--g3); letter-spacing: .05em; }
@@ -381,7 +433,7 @@ html[lang="ar"] .wa-tooltip::after { right: auto; left: 18px; }
 
 <!-- NAV -->
 <nav id="main-nav">
-  <a href="#hero" class="nav-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></a>
+  <a href="#" class="nav-logo" id="nav-logo-link" onclick="window.scrollTo({top:0,behavior:'smooth'});return false"><img id="nav-logo-img" src="Yaser_Alshkre__1_.png" alt="Yaser Al-Shkre" style="height:30px;width:auto"></a>
   <ul class="nav-links">
     <li><a href="#value"   class="en">Approach</a>   <a href="#value"   class="ar">المنهجية</a></li>
     <li><a href="#services" class="en">Services</a>   <a href="#services" class="ar">الخدمات</a></li>
@@ -513,7 +565,7 @@ html[lang="ar"] .wa-tooltip::after { right: auto; left: 18px; }
 <footer>
   <div class="footer-copy en">© 2025 Yaser Ahmed Al-Shkre. All rights reserved.</div>
   <div class="footer-copy ar">© 2025 ياسر أحمد الشكري. جميع الحقوق محفوظة.</div>
-  <div class="footer-logo"><img src="Yaser_Alshkre__1_.png" alt="Logo" onerror="this.style.display='none'"></div>
+  <div class="footer-logo"><img id="footer-logo-img" src="Yaser_Alshkre__1_.png" alt="Yaser Al-Shkre" style="height:26px"></div>
 </footer>
 
 <script>
@@ -550,14 +602,52 @@ function toggleLang() {
 }
 
 // ── Render ─────────────────────────────────────────────
+function renderLogo(logo) {
+  if (!logo) return;
+  const src  = logo.image || 'Yaser_Alshkre__1_.png';
+  const alt  = logo['alt_' + L()] || logo.alt_en || 'Logo';
+  const h    = (logo.height || '30') + 'px';
+
+  // On index.html logo scrolls to top; on other pages navigates to index.html
+  const isHome = window.location.pathname.endsWith('index.html')
+              || window.location.pathname === '/'
+              || window.location.pathname === '';
+
+  const navLink = document.getElementById('nav-logo-link');
+  const navImg  = document.getElementById('nav-logo-img');
+  if (navLink) {
+    if (isHome) {
+      navLink.href = '#';
+      navLink.onclick = (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+    } else {
+      navLink.href = logo.link || 'index.html';
+      navLink.onclick = null;
+    }
+  }
+  if (navImg) { navImg.src = src; navImg.alt = alt; navImg.style.height = h; }
+
+  const ftImg = document.getElementById('footer-logo-img');
+  if (ftImg)  { ftImg.src = src; ftImg.alt = alt; }
+}
+
 function renderAll() {
-  const d = injectTemps(getSiteData());
+  const raw = getSiteData();
+  const d   = injectTemps(raw);
+
+  // Apply dark/light mode
+  if (raw.theme_mode === 'light') {
+    document.documentElement.setAttribute('data-theme','light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+
+  renderLogo(raw.logo || {});
   renderHero(d.hero);
   renderAchievements(d.achievements || []);
   renderValues(d.hero.values || []);
   renderServices(d.services || []);
   renderFeaturedCase(d.cases || []);
-  renderTestimonials(d.about.testimonials || []);
+  renderTestimonials(d.about.testimonials || [], raw.testimonials_visible !== false);
   renderAbout(d.about);
   renderContact(d.contact);
   renderWhatsApp(d.whatsapp || {});
@@ -660,11 +750,17 @@ function renderFeaturedCase(cases) {
     </div>`;
 }
 
-function renderTestimonials(testis) {
+function renderTestimonials(testis, visible) {
   const sec = document.getElementById('testimonials');
+  if (!sec) return;
+  // Hide entire section if not visible
+  if (!visible) { sec.classList.add('testi-hidden'); return; }
+  sec.classList.remove('testi-hidden');
   if (!testis.length) { sec.style.display = 'none'; return; }
   sec.style.display = '';
-  document.getElementById('testi-grid').innerHTML = testis.map(t => `
+  document.getElementById('testi-grid').innerHTML = testis
+    .filter(t => t.visible !== false) // individual visibility
+    .map(t => `
     <div class="testi-card">
       <div class="testi-qmark">"</div>
       <p class="testi-text">${T(t.quote)}</p>
